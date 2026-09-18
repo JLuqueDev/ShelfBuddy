@@ -26,7 +26,7 @@ exports.createBook = async (req, res) => {
     try {
         const newBook = new Book(req.body);
         const savedBook = await newBook.save();
-        res.status(201).json(savedBook);
+        res.status(201).json({savedBook, message: 'Book logged successfully!'});
     } catch (err) {
         res.status(400).json({ error: err.message});
     }
@@ -41,7 +41,7 @@ exports.editBook = async (req, res) => {
             { new: true, runValidators: true}
         );
         if (!updatedBook) return res.status(404).json({ message: 'Book not found'});
-        res.json(updatedBook);
+        res.json({updatedBook, message: 'Info updated successfully!'});
     } catch (err) {
         res.status(400).json({ error: err.message});
     }

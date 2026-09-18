@@ -8,24 +8,24 @@ POST http://localhost:3000/api/books/
 Content-Type: application/json
 
 {
-  "title": "The Hobbit",
-  "author": "J.R.R. Tolkien",
-  "status": "Reading"
+  "title": "Cien Años de Soledad",
+  "author": "Gabriel García Márquez",
+  "status": "Finished"
 }
 
 ###
 
 ### 3. Test GET single book (Replace 12345 with a real _id from step 1)
-GET http://localhost:3000/api/books/12345
+GET http://localhost:3000/api/books/6aacb51afb830b0dc5d
 
 ###
 
 ### 4. Test PUT (Update a book - Replace 12345 with a real _id)
-PUT http://localhost:3000/api/books/12345
+PUT http://localhost:3000/api/books/6aacb51afa32d8b830b0dc5d
 Content-Type: application/json
 
 {
-  "status": "Completed"
+  "status": "Finished"
 }
 
 ###
