@@ -1,13 +1,14 @@
 const mongoose = require('mongoose')
 
 const bookSchema = new mongoose.Schema({
-    title: { type: string, required: true},
-    author: { type: string, required: true},
+    title: { type: String, required: true},
+    author: { type: String, required: true},
     status: {
-        type: string,
+        type: String,
+        required: true,
         enum: ['To read', 'Reading', 'Finished'],
         default: 'To read'
     }
 }, {timestamps:true});
 
-module.exports = mongoose.model('Books', bookSchema);
+module.exports = mongoose.model('Book', bookSchema);

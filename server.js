@@ -1,17 +1,26 @@
+// dependencies access
 const express = require('express');
 const app = express();
-require('dotenv').config()
+const mongoose = require('mongoose');
+require('dotenv').config();
+const bookRoutes = require('./routes/bookRoutes')
 
-const PORT = process.env.PORT
-
+// global middlewares
+app.use(express.json());
 app.use(express.static('public'));
 
+// database conection 
+const dbConnection = require('./config/db');
+
+// routes
+app.use('/api/books', bookRoutes);
+
+// PORT connction
+const PORT = process.env.PORT;
 app.listen(PORT, () => {
     try {
-        console.log(`Server connected successfully to port: ${PORT}`)
+        console.log(`Connected successfully to port: ${PORT}`);
     } catch (error) {
-        console.log(`Error connectiong to Node, Error: ${error.message}`);
-        
-    }
-    
+        console.log(`Error connectiong to PORT, Error: ${error.message}`);   
+    }  
 })

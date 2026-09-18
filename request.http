@@ -1,0 +1,34 @@
+### 1. Test GET all books
+GET http://localhost:3000/api/books
+
+###
+
+### 2. Test POST (Create a new book)
+POST http://localhost:3000/api/books/
+Content-Type: application/json
+
+{
+  "title": "The Hobbit",
+  "author": "J.R.R. Tolkien",
+  "status": "Reading"
+}
+
+###
+
+### 3. Test GET single book (Replace 12345 with a real _id from step 1)
+GET http://localhost:3000/api/books/12345
+
+###
+
+### 4. Test PUT (Update a book - Replace 12345 with a real _id)
+PUT http://localhost:3000/api/books/12345
+Content-Type: application/json
+
+{
+  "status": "Completed"
+}
+
+###
+
+### 5. Test DELETE (Replace 12345 with a real _id)
+DELETE http://localhost:3000/api/books/12345
