@@ -24,7 +24,7 @@ const validateBookBody = [
         .notEmpty().withMessage('Author is required'),
     body('status')
         .optional()
-        .isIn(['To Read', 'Reading', 'Completed'])
+        .isIn(['To Read', 'Reading', 'Finished'])
         .withMessage('Status must be either: To Read, Reading, or Completed'),
     handleValidationErrors
 ];
