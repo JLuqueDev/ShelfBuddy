@@ -70,7 +70,7 @@ const renderBooks = (books) => {
                     </div>
 
                     <div class="ms-md-auto gap-2 d-flex align-items-center">
-                    <button class="btn btn-outline-info" onclick="editBook('${book._id}')">
+                    <button class="btn btn-outline-info" onclick="openEditModal('${book._id}')">
                             Edit
                         </button>
                         <button class="btn btn-outline-danger" onclick="deleteBook('${book._id}')">
@@ -132,7 +132,7 @@ addBook.addEventListener('submit', async (e) => {
     }
 });
 
-// DELETE 
+// DELETE by id
 const deleteBook = async (id) => {
     if (!confirm('Are you sure you want to delete this book?'))
         return;
@@ -148,7 +148,25 @@ const deleteBook = async (id) => {
     }
 };
 
-
+// edit a book by id (PUT)
+// const openEditModal = async (id, updatedData) => {
+//     try {
+//         const res = await fetch(`/api/books/${id}`, {
+//             method: 'PUT',
+//             headers: { 'Content-Type': 'application/json'},
+//             body: JSON.stringify(updatedData)
+//         });
+//         const data = await res.json();
+//         if (!res.ok) {
+//             alert(data.error || 'Failed to updtade book details');
+//             return;
+//         }
+//         await fetchBooks();
+//         renderBooks(cachedBooks);
+//     } catch (err) {
+//         console.error('Error updating book:', err);
+//     }
+// };
 
 
 

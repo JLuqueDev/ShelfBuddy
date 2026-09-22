@@ -8,9 +8,9 @@ POST http://localhost:3000/api/books/
 Content-Type: application/json
 
 {
-  "title": "Cin Aos de Soledad",
-  "author": "Gabrie García Márqez",
-  "status": "Finished"
+  "title": "wrvqwrgfqw",
+  "author": "qwegrf",
+  "status": "To read"
 }
 
 ###

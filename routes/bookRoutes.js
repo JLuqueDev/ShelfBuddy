@@ -14,7 +14,7 @@ router.get('/:id', validateBookId, bookController.getOneBook);
 router.post('/', validateBookBody, checkDuplicateTitle, bookController.createBook);
 
 // PUT to update a book
-router.put('/:id', validateBookId, checkDuplicateTitle, bookController.editBook);
+router.put('/:id', validateBookId, bookController.editBook);
 
 // DELETE book
 router.delete('/:id', validateBookId, bookController.deleteBook);

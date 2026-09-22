@@ -13,8 +13,8 @@
         <button class="btn btn-outline-secondary" id="theme-toggle">🌙 Dark Mode</button>
         <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</button>
     </header>
-    <!-- Hero  -->
     <main class="container d-flex flex-column justify-content-center align-items-center hero-section">
+<!-- Hero  -->        
         <div class="text-center mb-4">
             <h1 class="display-1"><button class="logo" title="Check your library!">📚</button></h1>
             <h2 class="fw-bold">ShelfBuddy</h2>
@@ -25,45 +25,79 @@
             <input type="text" class="form-control form-control-lg rounded-pill mb-4 shadow-sm" placeholder="Search by title or author...">
             <div class="d-flex justify-content-center gap-2">
                 <button class="btn btn-light border">Search Library</button>
-<!-- Add Book button/Modal -->
                 <button class="btn btn-light border" type="button" data-bs-toggle="modal" data-bs-target="#addBookModal">Add New Book</button>
-    <!-- new book form -->
-                <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModal" aria-hidden="true">
-                <div class="modal-dialog modal-dialog-centered">
-                    <div class="modal-content">
-                    <div class="modal-header">
-                        <h5 class="modal-title">Type book details here:</h5>
-                        <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                    </div>
-                    <div class="modal-body">
-                        <form id="add-book-form">
-                        <div class="mb-3">
-                            <label for="title" class="form-label">Book Title</label>
-                            <input type="text" class="form-control" id="title" placeholder="e.g. Dune" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="author" class="form-label">Author</label>
-                            <input type="text" class="form-control" id="author" placeholder="e.g. Frank Herbert" required />
-                        </div>
-                        <div class="mb-3">
-                            <label for="status" class="form-label">Reading Status</label>
-                            <select class="form-select" id="status">
-                            <option value="To read" selected>To read</option>
-                            <option value="Reading">Reading</option>
-                            <option value="Finished">Finished</option>
-                            </select>
-                        </div>
-                        <div class="d-flex justify-content-end gap-2">
-                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                            <button type="submit" class="btn btn-primary">Save Book</button>
-                        </div>
-                        </form>
-                    </div>
-                    </div>
+            </div>
+        </div>
+<!-- new book form/modal -->
+    <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModal" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Type book details here:</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
+                <div class="modal-body">
+                    <form id="add-book-form">
+                    <div class="mb-3">
+                        <label for="title" class="form-label">Book Title</label>
+                        <input type="text" class="form-control" id="title" placeholder="e.g. Dune" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="author" class="form-label">Author</label>
+                        <input type="text" class="form-control" id="author" placeholder="e.g. Frank Herbert" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="status" class="form-label">Reading Status</label>
+                        <select class="form-select" id="status">
+                        <option value="To read" selected>To read</option>
+                        <option value="Reading">Reading</option>
+                        <option value="Finished">Finished</option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-primary">Save Book</button>
+                    </div>
+                    </form>
                 </div>
             </div>
         </div>
+    </div>
+<!-- Edit book modal/form -->
+    <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Edit Book Details</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                    <form id="edit-book-form">
+                    <div class="mb-3">
+                        <label for="edit-title" class="form-label">Book Title</label>
+                        <input type="text" class="form-control" id="edit-title" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-author" class="form-label">Author</label>
+                        <input type="text" class="form-control" id="edit-author" required />
+                    </div>
+                    <div class="mb-3">
+                        <label for="edit-status" class="form-label">Reading Status</label>
+                        <select class="form-select" id="edit-status">
+                        <option value="To Read">To Read</option>
+                        <option value="Reading">Reading</option>
+                        <option value="Finished">Finished</option>
+                        </select>
+                    </div>
+                    <div class="d-flex justify-content-end gap-2">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                        <button type="submit" class="btn btn-info text-white">Save Changes</button>
+                    </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <section class="bookList row g-4"></section>
     </main>
     <!-- Footer -->
