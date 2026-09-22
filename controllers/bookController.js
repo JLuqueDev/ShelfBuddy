@@ -5,6 +5,7 @@ exports.getAllBooks = async (req, res) => {
     try {
         const books = await Book.find().sort({createdAt: -1});
         res.json(books);
+        console.log('Full book list displayed!');
     } catch (err) {
         res.status(500).json({ error: err.message });
     }
@@ -16,6 +17,8 @@ exports.getOneBook = async (req, res) => {
         const book = await Book.findById(req.params.id);
         if (!book) return res.status(404).json({ message: 'Book not found'});
         res.json(book);
+        console.log('Requested item displayed!');
+        
      } catch (err) {
         res.status(500).json({ error: err.message});
      }
@@ -27,6 +30,7 @@ exports.createBook = async (req, res) => {
         const newBook = new Book(req.body);
         const savedBook = await newBook.save();
         res.status(201).json({savedBook, message: 'Book logged successfully!'});
+        console.log('Book logged successfully!');
     } catch (err) {
         res.status(400).json({ error: err.message});
     }
@@ -42,6 +46,7 @@ exports.editBook = async (req, res) => {
         );
         if (!updatedBook) return res.status(404).json({ message: 'Book not found'});
         res.json({updatedBook, message: 'Info updated successfully!'});
+        console.log('Info updated successfully!');
     } catch (err) {
         res.status(400).json({ error: err.message});
     }
@@ -52,7 +57,8 @@ exports.deleteBook = async (req, res) => {
     try {
         const deletedBook = await Book.findByIdAndDelete(req.params.id);
         if (!deletedBook) return res.status(404).json({ message: 'Book not found'});
-        res.json({ message: 'Book deleted successfully'});
+        res.json({ message: 'Book deleted successfully!'});
+        console.log('Book deleted successfully!');
     } catch (err) {
         res.status(500).json({ error: err.message});
     }

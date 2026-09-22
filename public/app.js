@@ -61,7 +61,7 @@ const renderBooks = (books) => {
                 <div class="card-body d-flex flex-wrap flex-column flex-md-row align-items-md-center justify-content-between gap-3">
                     <div class="flex-grow-1">
                         <span class=" ${statusBadgeColor} fw-medium fs-6">${book.status}</span>
-                        <h4 class="card-title text-truncate fw-bold mb-1 fs-4" title="${book.title}">
+                        <h4 class="card-title w-75 fw-bold mb-1 fs-4" title="${book.title}">
                             ${book.title}
                         </h4>
                         <p class="card-subtitle text-muted mb-0 fs-5">
