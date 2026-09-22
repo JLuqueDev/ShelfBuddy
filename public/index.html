@@ -26,16 +26,16 @@
             <div class="d-flex justify-content-center gap-2">
                 <button class="btn btn-light border">Search Library</button>
 <!-- Add Book button/Modal -->
-                <button class="btn btn-light border" type="button" data-bs-toggle="modal" data-bs-target="#addBookForm">Add New Book</button>
-                <div class="modal fade" id="addBookForm" tabindex="-1" aria-labelledby="addBookModalLabel" aria-hidden="true">
+                <button class="btn btn-light border" type="button" data-bs-toggle="modal" data-bs-target="#addBookModal">Add New Book</button>
+    <!-- new book form -->
+                <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModal" aria-hidden="true">
                 <div class="modal-dialog modal-dialog-centered">
                     <div class="modal-content">
                     <div class="modal-header">
-                        <h5 class="modal-title" id="addBookModalLabel">Add a New Book</h5>
+                        <h5 class="modal-title">Type book details here:</h5>
                         <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                     </div>
                     <div class="modal-body">
-            <!-- new book form -->
                         <form id="add-book-form">
                         <div class="mb-3">
                             <label for="title" class="form-label">Book Title</label>
@@ -48,7 +48,7 @@
                         <div class="mb-3">
                             <label for="status" class="form-label">Reading Status</label>
                             <select class="form-select" id="status">
-                            <option value="To Read" selected>To Read</option>
+                            <option value="To read" selected>To read</option>
                             <option value="Reading">Reading</option>
                             <option value="Finished">Finished</option>
                             </select>
@@ -64,7 +64,7 @@
                 </div>
             </div>
         </div>
-    <section class="bookList d-flex flex-column gap-3"></section>
+    <section class="bookList row g-4"></section>
     </main>
     <!-- Footer -->
     <footer class="text-center p-3 text-muted small">

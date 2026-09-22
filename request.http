@@ -8,8 +8,8 @@ POST http://localhost:3000/api/books/
 Content-Type: application/json
 
 {
-  "title": "Cien Años de Soledad",
-  "author": "Gabriel García Márquez",
+  "title": "Cin Aos de Soledad",
+  "author": "Gabrie García Márqez",
   "status": "Finished"
 }
 
@@ -21,14 +21,14 @@ GET http://localhost:3000/api/books/6aacb51afb830b0dc5d
 ###
 
 ### 4. Test PUT (Update a book - Replace 12345 with a real _id)
-PUT http://localhost:3000/api/books/6aacb51afa32d8b830b0dc5d
+PUT http://localhost:3000/api/books/6ab18af31c1d1dfde9bf58eb
 Content-Type: application/json
 
 {
-  "status": "Finished"
+  "status": "To read"
 }
 
 ###
 
 ### 5. Test DELETE (Replace 12345 with a real _id)
-DELETE http://localhost:3000/api/books/12345
+DELETE http://localhost:3000/api/books/6ab18af31c1d1dfde9bf58eb
