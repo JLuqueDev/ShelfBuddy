@@ -12,7 +12,7 @@ router.get('/', verifyToken, bookController.getAllBooks);
 router.get('/:id', verifyToken, validateBookId, bookController.getOneBook);
 
 // POST a book
-router.post('/',  validateBookBody, checkDuplicateTitle, bookController.createBook);
+router.post('/', verifyToken, validateBookBody, checkDuplicateTitle, bookController.createBook);
 
 // PUT to update a book
 router.put('/:id', verifyToken, validateBookId, bookController.editBook);
