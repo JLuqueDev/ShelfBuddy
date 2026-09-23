@@ -8,7 +8,7 @@ const checkDuplicateTitle = async (req, res, next) => {
         }
         const existingBook = await Book.findOne({
         title: { $regex: new RegExp(`^${title.trim()}`, 'i')},
-        // user: req.user.id     to be used later when seting up FE
+        user: req.user.id     
     });
         if (existingBook) {
         return res.status(409).json({

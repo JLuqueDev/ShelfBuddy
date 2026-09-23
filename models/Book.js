@@ -8,6 +8,11 @@ const bookSchema = new mongoose.Schema({
         required: true,
         enum: ['To read', 'Reading', 'Finished'],
         default: 'To read'
+    },
+    user: {
+        type: mongoose.Schema.Types.ObjectId,
+        ref: 'User',
+        required: true
     }
 }, {timestamps:true});
 

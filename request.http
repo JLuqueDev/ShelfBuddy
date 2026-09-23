@@ -1,14 +1,57 @@
-############### Books ################### 
+############### Users ###################
+
+
+
+### Register new user 
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+  "username": "brucewayne",
+  "email": "batman@gotham.com",
+  "password": "supersecretpassword"
+}
+
+###
+
+### Login with email (auto-capturing token)
+# @name loginWithEmail
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "identifier": "batman@gotham.com",
+  "password": "supersecretpassword"
+}
+
+###
+
+### Login with username
+# @name loginWithUsername
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "identifier": "brucewayne",
+  "password": "supersecretpassword"
+}
 
 
 
 
-### 1. Test GET all books
+################## Books ################### 
+
+
+### GET all books (fails, no token)
 GET http://localhost:3000/api/books
 
 ###
 
-### 2. Test POST (Create a new book)
+### Get Protected Books
+GET http://localhost:3000/api/books
+Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjMxNDJjM2YxYjFhMjVmYjkzNGYyZCIsImlhdCI6MTc5MDE5MjgxMSwiZXhwIjoxNzkwMTk2NDExfQ.kVOEpaMPHXJbxGZkIZ6D7Luy3kpSsNvKk1wSzti6N3Y
+
+### POST (Create a new book)
 POST http://localhost:3000/api/books/
 Content-Type: application/json
 
@@ -20,12 +63,12 @@ Content-Type: application/json
 
 ###
 
-### 3. Test GET single book (Replace 12345 with a real _id from step 1)
+### GET single book (Replace 12345 with a real _id from step 1)
 GET http://localhost:3000/api/books/6aacb51afb830b0dc5d
 
 ###
 
-### 4. Test PUT (Update a book - Replace 12345 with a real _id)
+### 4. PUT (Update a book - Replace 12345 with a real _id)
 PUT http://localhost:3000/api/books/6ab18af31c1d1dfde9bf58eb
 Content-Type: application/json
 
@@ -35,34 +78,6 @@ Content-Type: application/json
 
 ###
 
-### 5. Test DELETE a book (Replace 12345 with a real _id)
+### 5. DELETE a book (Replace 12345 with a real _id)
 DELETE http://localhost:3000/api/books/6ab18af31c1d1dfde9bf58eb
 
-
-
-
-############### Users ###################
-
-
-
-
-### Register a new user
-POST http://localhost:3000/api/users/register
-Content-Type: application/json
-
-{
-  "name": "Bruce Wayne",
-  "email": "batman@gotham.com",
-  "password": "supersecretpassword"
-}
-
-###
-
-### Login and get JWT
-POST http://localhost:3000/api/users/login
-Content-Type: application/json
-
-{
-  "email": "batman@gotham.com",
-  "password": "supersecretpassword"
-}

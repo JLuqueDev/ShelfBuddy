@@ -7,7 +7,7 @@ const verifyToken = (req, res, next) => {
         // to check the header exisits before splitting:
         if (!headerAuth) {
             res.status(403).json({ error: 'Token missing, access denied' });
-            console.log('Token missing, access denied');
+            console.log('Please sign in first to see your collection!');
             return;
         }
         // to prevent the "Cannot read properties of undefined (reading 'split') crash" we saw in class:
@@ -24,7 +24,7 @@ const verifyToken = (req, res, next) => {
         req.user = decoded;
         next();
     } catch (error) {
-        console.log(`Invalid or expired token: ${error.message}`);
+        console.log('Your session expired! Please log in');
         res.status(401).json({ msg: `Invalid or expired token: ${error.message}`});
         return;
     }
