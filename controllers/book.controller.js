@@ -1,6 +1,6 @@
 const Book = require('../models/Book');
 
-// GET all
+// GET all books
 exports.getAllBooks = async (req, res) => {
     try {
         const books = await Book.find().sort({createdAt: -1});
@@ -8,10 +8,11 @@ exports.getAllBooks = async (req, res) => {
         console.log('Full book list displayed!');
     } catch (err) {
         res.status(500).json({ error: err.message });
+        console.error('GET-a book.ctrl error', err.message);
     }
 };
 
-// GET a specific one with ID
+// GET a specific book with ID
 exports.getOneBook = async (req, res) => {
     try {
         const book = await Book.findById(req.params.id);
@@ -21,6 +22,7 @@ exports.getOneBook = async (req, res) => {
         
      } catch (err) {
         res.status(500).json({ error: err.message});
+        console.error('GET-one book.ctrl error', err.message);
      }
 };
 
@@ -33,6 +35,7 @@ exports.createBook = async (req, res) => {
         console.log('Book logged successfully!');
     } catch (err) {
         res.status(400).json({ error: err.message});
+        console.error('POST book.ctrl error', err.message);
     }
 };
 
@@ -49,6 +52,7 @@ exports.editBook = async (req, res) => {
         console.log('Info updated successfully!');
     } catch (err) {
         res.status(400).json({ error: err.message});
+        console.error('PUT book.ctrl error', err.message);
     }
 };
 
@@ -61,5 +65,6 @@ exports.deleteBook = async (req, res) => {
         console.log('Book deleted successfully!');
     } catch (err) {
         res.status(500).json({ error: err.message});
+        console.error('DEL book.ctrl error', err.message);
     }
 };

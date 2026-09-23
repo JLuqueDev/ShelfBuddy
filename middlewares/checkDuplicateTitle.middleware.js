@@ -8,7 +8,7 @@ const checkDuplicateTitle = async (req, res, next) => {
         }
         const existingBook = await Book.findOne({
         title: { $regex: new RegExp(`^${title.trim()}`, 'i')},
-        user: req.user.id
+        // user: req.user.id     to be used later when seting up FE
     });
         if (existingBook) {
         return res.status(409).json({
@@ -17,6 +17,7 @@ const checkDuplicateTitle = async (req, res, next) => {
         }
         next();
     } catch (err) {
+        console.error('Duplicate middleware error:', err.message)
     res.status(500).json({ err: err.message});
     }
 };

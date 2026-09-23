@@ -5,6 +5,7 @@ const handleValidationErrors = (req, res, next) => {
     try {
         const errors = validationResult(req);
         if (!errors.isEmpty()) {
+            console.log('BookValidate midwr error');
             return res.status(400).json({ errors: errors.array()});
     } 
     next();

@@ -27,4 +27,4 @@ app.listen(PORT, () => {
     } catch (error) {
         console.log(`Error connectiong to PORT, Error: ${error.message}`);   
     }  
-})
+});
