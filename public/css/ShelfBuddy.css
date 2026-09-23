@@ -3,12 +3,12 @@
     min-height: 75vh;
 }
 
-h1 > button {
+.logo {
     background: none;
     border: none;
     transition: transform 0.3s ease;
 }
-h1 > button:hover {
+.logo:hover {
     transform: scale(1.2);
 }
 

@@ -10,119 +10,194 @@
 <body>                          
 <!-- Header -->
     <header class="d-flex justify-content-between p-3">
-        <button class="btn btn-outline-secondary" id="theme-toggle">🌙 Dark Mode</button>
-        <button class="btn btn-primary" data-bs-toggle="modal" data-bs-target="#loginModal">Sign In</button>
+        <button class="btn btn-outline-secondary" type="button" id="theme-toggle">🌙 Dark Mode</button>
+        <button class="btn btn-primary" type="button" data-bs-toggle="modal" data-bs-target="#loginModal">Login || Register</button>
     </header>
+
     <main class="container d-flex flex-column justify-content-center align-items-center hero-section">
-<!-- Hero  -->        
-        <div class="text-center mb-4">
-            <h1 class="display-1"><button class="logo" title="Check your library!">📚</button></h1>
-            <h2 class="fw-bold">ShelfBuddy</h2>
+
+        <!-- Hero  -->        
+        <section class="text-center mb-4">
+            <button class="logo display-1" type="button" title="Check your library!">📚</button>
+            <h1 class="fw-bold">ShelfBuddy</h1>
             <p class="text-muted catch-phrase" data-hover="Tracking my reading journey!"></p>
-        </div>
-<!-- Search Area -->
-        <div class="w-100 mb-4" style="max-width: 600px;">
-            <input type="text" class="form-control form-control-lg rounded-pill mb-4 shadow-sm" placeholder="Search by title or author...">
-            <div class="d-flex justify-content-center gap-2">
-                <button class="btn btn-light border">Search Library</button>
-                <button class="btn btn-light border" type="button" data-bs-toggle="modal" data-bs-target="#addBookModal">Add New Book</button>
-            </div>
-        </div>
-<!-- new book form/modal -->
-    <div class="modal fade" id="addBookModal" tabindex="-1" aria-labelledby="addBookModal" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Type book details here:</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        </section>
+
+        <!-- Search Area -->
+        <search class="w-100 mb-4" style="max-width: 600px;">
+            <form class="d-flex flex-column gap-3" id="search-form" onsubmit="event.preventDefault();">
+                <input type="search" class="form-control form-control-lg rounded-pill shadow-sm" placeholder="Search by title or author..." aria-label="Search Library">
+                <div class="d-flex justify-content-center gap-2">
+                    <button class="btn btn-light border" type="submit">Search Library</button>
+                    <button class="btn btn-light border" type="button" data-bs-toggle="modal" data-bs-target="#addBookModal">Add New Book</button>
                 </div>
-                <div class="modal-body">
-                    <form id="add-book-form">
-                    <div class="mb-3">
-                        <label for="title" class="form-label">Book Title</label>
-                        <input type="text" class="form-control" id="title" placeholder="e.g. Dune" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="author" class="form-label">Author</label>
-                        <input type="text" class="form-control" id="author" placeholder="e.g. Frank Herbert" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="status" class="form-label">Reading Status</label>
-                        <select class="form-select" id="status">
-                        <option value="To read" selected>To read</option>
-                        <option value="Reading">Reading</option>
-                        <option value="Finished">Finished</option>
-                        </select>
-                    </div>
-                    <div class="d-flex justify-content-end gap-2">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-primary">Save Book</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-<!-- Edit book modal/form -->
-    <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title">Edit Book Details</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
-                <div class="modal-body">
-                    <form id="edit-book-form">
-                    <div class="mb-3">
-                        <label for="edit-title" class="form-label">Book Title</label>
-                        <input type="text" class="form-control" id="edit-title" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit-author" class="form-label">Author</label>
-                        <input type="text" class="form-control" id="edit-author" required />
-                    </div>
-                    <div class="mb-3">
-                        <label for="edit-status" class="form-label">Reading Status</label>
-                        <select class="form-select" id="edit-status">
-                        <option value="To Read">To Read</option>
-                        <option value="Reading">Reading</option>
-                        <option value="Finished">Finished</option>
-                        </select>
-                    </div>
-                    <div class="d-flex justify-content-end gap-2">
-                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
-                        <button type="submit" class="btn btn-info text-white">Save Changes</button>
-                    </div>
-                    </form>
-                </div>
-            </div>
-        </div>
-    </div>
-    <section class="bookList row g-4"></section>
+            </form>
+        </search>
+
+        <!-- bookList (imbeued from JS)-->
+        <div class="bookList row g-4"></div>
+
     </main>
-<!-- Footer -->
+
+    <!-- Footer -->
     <footer class="text-center p-3 text-muted small">
         <p>&copy; 2026 ShelfBuddy | <a href="#" class="text-decoration-none text-muted">About</a> | <a href="#" class="text-decoration-none text-muted">GitHub</a></p>
     </footer>
-<!-- Login -->
+
+    <!-- Login modal -->
     <div class="modal fade" id="loginModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content">
-                <div class="modal-header border-0">
-                    <h5 class="modal-title fw-bold">Sign In</h5>
-                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
-                </div>
+
+                <header class="modal-header row border-0">
+                    <h2 class=" h5 modal-title text-center col-11 fw-bold ">Log into your Shelf!</h2>
+                    <button type="button" class="btn-close col-1 mx-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                </header>
+
                 <div class="modal-body">
+
                     <form action="#" method="post">
-                        <div class="mb-3">
-                            <label for="email" class="form-label">Email/Username</label>
-                            <input type="email" class="form-control" id="email" required>
-                        </div>
-                        <div class="mb-4">
-                            <label for="password" class="form-label">Password</label>
-                            <input type="password" class="form-control" id="password" required>
-                        </div>
-                        <button type="submit" class="btn btn-primary w-100">Login</button>
+                        <fieldset>
+                            <legend class="visually-hidden">Login form</legend>
+                            <div class="mb-3">
+                                <label for="loginEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="loginEmail" name="loginEmail" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="loginPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="loginPassword" name="loginPassword" required>
+                            </div>
+                        </fieldset>
+
+                        <footer>
+                            <button type="submit" class="btn btn-primary mb-4 w-100">Login</button>
+                            <p>Don't have an account? <a class="text-decoration-none" role="button" data-bs-toggle="modal" data-bs-target="#signUpModal">Sign up!</a></p>
+                        </footer>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- new book form/modal -->
+    <div class="modal fade" id="addBookModal" role="form" tabindex="-1" aria-labelledby="addBookModalTitle" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <header class="modal-header">
+                    <h2 class=" h5 modal-title" id="addBookModalTitle">Type book details here:</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </header>
+
+                <div class="modal-body">
+
+                    <form id="add-book-form">
+                        <fieldset>
+                            <legend class="visually-hidden">Book details form</legend>
+                            <div class="mb-3">
+                                <label for="title" class="form-label">Book Title</label>
+                                <input type="text" class="form-control" id="title" placeholder="e.g. Dune" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="author" class="form-label">Author</label>
+                                <input type="text" class="form-control" id="author" placeholder="e.g. Frank Herbert" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="status" class="form-label">Reading Status</label>
+                                <select class="form-select" id="status">
+                                    <option value="To read" selected>To read</option>
+                                    <option value="Reading">Reading</option>
+                                    <option value="Finished">Finished</option>
+                                </select>
+                            </div>
+                        </fieldset>
+                        
+                        <footer class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-primary">Save Book</button>
+                        </footer>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Edit book modal/form -->
+    <div class="modal fade" id="editBookModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+
+                <header class="modal-header">
+                    <h2 class=" h5 modal-title">Edit Book Details</h2>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </header>
+
+                <div class="modal-body">
+
+                    <form id="edit-book-form">
+                        <fieldset>
+                            <legend class="visually-hidden">Edit book details form</legend>
+                            <div class="mb-3">
+                                <label for="edit-title" class="form-label">Book Title</label>
+                                <input type="text" class="form-control" id="edit-title" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-author" class="form-label">Author</label>
+                                <input type="text" class="form-control" id="edit-author" required />
+                            </div>
+                            <div class="mb-3">
+                                <label for="edit-status" class="form-label">Reading Status</label>
+                                <select class="form-select" id="edit-status">
+                                    <option value="To Read">To Read</option>
+                                    <option value="Reading">Reading</option>
+                                    <option value="Finished">Finished</option>
+                                </select>
+                            </div>
+                        </fieldset>
+
+                        <footer class="d-flex justify-content-end gap-2">
+                            <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancel</button>
+                            <button type="submit" class="btn btn-info text-white">Save Changes</button>
+                        </footer>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <!-- Register -->
+    <div class="modal fade" id="signUpModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                
+                <header class="modal-header row border-0">
+                    <h2 class=" h5 modal-title text-center col-11 fw-bold ">Create your account!</h2>
+                    <button type="button" class="btn-close col-1 mx-0" data-bs-dismiss="modal" aria-label="Close"></button>
+                </header>
+                
+
+                <div class="modal-body">
+
+                    <form action="#" method="post">
+                        <fieldset>
+                            <legend class="visually-hidden">Register form</legend>
+                            <div class="mb-3">
+                                <label for="signUpName" class="form-label">Name</label>
+                                <input type="text" class="form-control" id="signUpName" name="signUpName" required>
+                            </div>
+                            <div class="mb-3">
+                                <label for="signUpEmail" class="form-label">Email</label>
+                                <input type="email" class="form-control" id="signUpEmail" name="signUpEmail" required>
+                            </div>
+                            <div class="mb-4">
+                                <label for="signUpPassword" class="form-label">Password</label>
+                                <input type="password" class="form-control" id="signUpPassword" name="signUpPassword" required>
+                            </div>
+                        </fieldset>
+
+                        <footer>
+                            <button type="submit" class="btn btn-primary mb-4 w-100">Register</button>
+                        </footer>
                     </form>
                 </div>
             </div>
