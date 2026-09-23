@@ -1,23 +1,24 @@
 const express = require('express');
 const router = express.Router();
-const bookController = require('./../controllers/bookController')
-const { validateBookBody, validateBookId } = require('../middlewares/validateBook');
-const checkDuplicateTitle = require('../middlewares/checkDuplicateTitle');
+const bookController = require('./../controllers/book.controller')
+const { validateBookBody, validateBookId } = require('../middlewares/validateBook.middleware');
+const checkDuplicateTitle = require('../middlewares/checkDuplicateTitle.middleware');
+const verifyToken = require('./../middlewares/authUser.middleware')
 
 // GET all
-router.get('/', bookController.getAllBooks);
+router.get('/', verifyToken, bookController.getAllBooks);
 
 // GET a single one
-router.get('/:id', validateBookId, bookController.getOneBook);
+router.get('/:id', verifyToken, validateBookId, bookController.getOneBook);
 
 // POST a book
-router.post('/', validateBookBody, checkDuplicateTitle, bookController.createBook);
+router.post('/', verifyToken, validateBookBody, checkDuplicateTitle, bookController.createBook);
 
 // PUT to update a book
-router.put('/:id', validateBookId, bookController.editBook);
+router.put('/:id', verifyToken, validateBookId, bookController.editBook);
 
 // DELETE book
-router.delete('/:id', validateBookId, bookController.deleteBook);
+router.delete('/:id', verifyToken, validateBookId, bookController.deleteBook);
 
 module.exports = router;
 

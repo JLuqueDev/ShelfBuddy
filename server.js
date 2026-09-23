@@ -4,6 +4,7 @@ const app = express();
 const mongoose = require('mongoose');
 require('dotenv').config();
 const bookRoutes = require('./routes/bookRoutes')
+const userRoutes = require('./routes/userRoutes');
 
 // global middlewares
 app.use(express.json());
@@ -12,7 +13,10 @@ app.use(express.static('public'));
 // database conection 
 const dbConnection = require('./config/db');
 
-// routes
+// user routes
+app.use('/api/users', userRoutes);
+
+// book routes
 app.use('/api/books', bookRoutes);
 
 // PORT connction

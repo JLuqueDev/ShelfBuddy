@@ -1,3 +1,8 @@
+############### Books ################### 
+
+
+
+
 ### 1. Test GET all books
 GET http://localhost:3000/api/books
 
@@ -30,5 +35,34 @@ Content-Type: application/json
 
 ###
 
-### 5. Test DELETE (Replace 12345 with a real _id)
+### 5. Test DELETE a book (Replace 12345 with a real _id)
 DELETE http://localhost:3000/api/books/6ab18af31c1d1dfde9bf58eb
+
+
+
+
+############### Users ###################
+
+
+
+
+### Register a new user
+POST http://localhost:3000/api/users/register
+Content-Type: application/json
+
+{
+  "name": "Bruce Wayne",
+  "email": "batman@gotham.com",
+  "password": "supersecretpassword"
+}
+
+###
+
+### Login and get JWT
+POST http://localhost:3000/api/users/login
+Content-Type: application/json
+
+{
+  "email": "batman@gotham.com",
+  "password": "supersecretpassword"
+}
