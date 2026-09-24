@@ -6,8 +6,8 @@ const verifyToken = (req, res, next) => {
 
         // to check the header exisits before splitting:
         if (!headerAuth) {
-            res.status(403).json({ error: 'Token missing, access denied' });
-            console.log('Please sign in first to see your collection!');
+            res.status(403).json( 'Please sign in first!' );
+            console.log(error, 'Token missing, access denied');
             return;
         }
         // to prevent the "Cannot read properties of undefined (reading 'split') crash" we saw in class:

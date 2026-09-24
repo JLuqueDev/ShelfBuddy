@@ -3,7 +3,7 @@ const Book = require('../models/Book');
 // GET all books
 exports.getAllBooks = async (req, res) => {
     try {
-        const books = await Book.find().sort({createdAt: -1});
+        const books = await Book.find({user: req.user.id}).sort({createdAt: -1});
         res.json(books);
         console.log('Full book list displayed!');
     } catch (err) {
@@ -15,7 +15,10 @@ exports.getAllBooks = async (req, res) => {
 // GET a specific book with ID
 exports.getOneBook = async (req, res) => {
     try {
-        const book = await Book.findById(req.params.id);
+        const book = await Book.findOne({
+            _id: req.params.id,
+            user: req.user.id
+        });
         if (!book) return res.status(404).json({ message: 'Book not found'});
         res.json(book);
         console.log('Requested item displayed!');
@@ -29,7 +32,10 @@ exports.getOneBook = async (req, res) => {
 // CREATE new book
 exports.createBook = async (req, res) => {
     try {
-        const newBook = new Book(req.body);
+        const newBook = new Book({
+            ...req.body,
+            user: req.user.id
+        });
         const savedBook = await newBook.save();
         res.status(201).json({savedBook, message: 'Book logged successfully!'});
         console.log('Book logged successfully!');
@@ -59,8 +65,14 @@ exports.editBook = async (req, res) => {
 // DELETE an existing book by ID
 exports.deleteBook = async (req, res) => {
     try {
-        const deletedBook = await Book.findByIdAndDelete(req.params.id);
-        if (!deletedBook) return res.status(404).json({ message: 'Book not found'});
+        const deletedBook = await Book.findByIdAndDelete({
+            _id: req.params.id,
+            user: req.user.id
+        });
+        if (!deletedBook) {
+            console.log('Book not found or unauthorized');
+            return res.status(404).json({ message: 'Book not found'});
+        }
         res.json({ message: 'Book deleted successfully!'});
         console.log('Book deleted successfully!');
     } catch (err) {

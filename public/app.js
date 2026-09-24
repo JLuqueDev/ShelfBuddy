@@ -1,31 +1,111 @@
 //
-// DOM MANIPULATION
+// DOM MANIPULATION and elements
 //
 const bodyElement = document.body;
 const themeToggleBtn = document.getElementById('theme-toggle');
 const showBookList = document.querySelector('.logo');
 const bookList = document.querySelector('.bookList');
 const addBook = document.getElementById('add-book-form');
+const editBook = document.getElementById('edit-book-form');
+const loginForm = document.getElementById('logInForm');
+const registerForm = document.getElementById('registerForm');
 
-let cachedBooks = [];
+// state variable
+let cachedBooks = []
+// =========================================
+// AUTHENTICATION logic: register/login with jwt
+// =========================================
 
-// dark/ligth mode toggler
-themeToggleBtn.addEventListener('click', () => {
-    bodyElement.classList.toggle('dark-mode');
-    if (bodyElement.classList.contains('dark-mode')) {
-        themeToggleBtn.innerText = '☀️ Light mode';
-        themeToggleBtn.classList.replace('btn-outline-secondary', 'btn-outline-light');
-    } else {
-        themeToggleBtn.innerText = '🌙 Dark mode';
-        themeToggleBtn.classList.replace('btn-outline-light', 'btn-outline-secondary');
+// store token
+const getToken = () => localStorage.getItem('shelfBuddyToken');
+const setToken = (token) => localStorage.setItem('shelfBuddyToken', token);
+const clearToken = () => localStorage.removeItem('shelfBuddyToken');
+
+// jwt header gen
+const getAuthHeaders = () => {
+    const token = getToken();
+    return {
+        'Content-Type': 'application/json',
+        'Authorization': token ? `Bearer ${token}` : ''
+    };
+};
+
+// Login
+const loginUser = async (identifier, password) => {
+    try {
+        const res = await fetch('/api/users/login', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({ 
+                identifier: document.getElementById('loginIdentifier').value,
+                password: document.getElementById('loginPassword').value
+            })
+        });
+        const data = await res.json();
+
+        if(!res.ok) {
+            console.log('Login failed:', data.msg || data.error);
+            alert('Failed to login: ', data.msg || data.error);
+            return;
+        }
+        setToken(data.token); // saves jwt
+        alert('Login successful!');
+        fetchBooks();
+    } catch (err) {
+        console.error('Login error:', err);
     }
-});
+};
 
-// fetch books from API (GET all and store them in cachedBooks)
+// register 
+const registerUser = async (username, email, password) => {
+    try {
+        const res = await fetch('/api/users/register', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json'},
+            body: JSON.stringify({username, email, password})
+        });
+        const data = await res.json();
+
+        if (!res.ok) {
+            console.log('Failed registration');
+            alert('Registration failed', data.error);
+            return;
+        }
+        alert('Welcome! Please log in');
+    } catch (err) {
+        console.error('Registration error:', err);
+    }
+};
+    
+// logout
+const logoutUser = () => {
+    clearToken();
+    cachedBooks = [];
+    bookList.innerHTML = '';
+    alert('Come back soon!')
+}
+
+// =========================================
+// CRUD logic
+// =========================================
+
+// ===GET=== fetch books from API (GET all and store them in cachedBooks), auth
 const fetchBooks = async () => {
+    if (!getToken()) {
+        console.log('User not logged in. Unable to retrieve books');
+    }
     try { 
-        const res = await fetch('/api/books');
+        const res = await fetch('/api/books', {
+            headers: { 'Authorization': `Bearer ${getToken()}`}
+        });
         const books = await res.json();
+        
+        if (res.status === 401) {
+            clearToken();
+            alert('Session expired. Sign in again!');
+            return;
+        }
+
         if (books.length === 0) {
             console.log('No books added to database yet!');
             cachedBooks = books;
@@ -38,6 +118,122 @@ const fetchBooks = async () => {
         bookList.innerHTML = `<p class="text-danger text-center">Failed to load library.</p>`;
     }
 };
+
+// ===POST=== Form submission 
+addBook.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const title = document.getElementById('title').value;
+    const author = document.getElementById('author').value;
+    const status = document.getElementById('status').value;
+
+    try {
+        const res = await fetch('/api/books', {
+            method: 'POST',
+            headers: getAuthHeaders(),
+            body: JSON.stringify({title, author, status})
+        });
+        const data = await res.json();
+
+        if (!res.ok) {    
+            alert(data.error || (data.errors ? data.errors[0].msg: 'Failed to save the book'));
+            return;
+        }
+        addBook.reset();
+
+        // to close form modal if open
+        const formModal = document.getElementById('addBookModal');
+        if (formModal) {
+            const modalInstance = bootstrap.Modal.getInstance(formModal);
+            if (modalInstance) modalInstance.hide();
+        }
+        await fetchBooks(); // refresh catalog 
+        renderBooks(cachedBooks);
+    } catch (err) {
+        console.error('Error adding book:', err);
+    }
+});
+
+// ===PUT=== edit a book by id 
+let currentEditId = null;
+/// 1. open modal and populate book info
+const openEditModal = (id) => {
+    const book = cachedBooks.find(b => b.id === id);
+    if (!book) return;
+
+    const currentEditId = id;    // saves id for the submission
+
+    document.getElementById('edit-title').value = book.title;
+    document.getElementById('edit-author').value = book.author;
+    document.getElementById('edit-status').value = book.status;
+
+    const editModal = new bootstrap.Modal(document.getElementById('editBookModal'));
+    editModal.show();
+};
+/// 2. submit corrected book data -auth
+editBook.addEventListener('submit', async(e) => {
+    e.preventDefault();
+    if(!currentEditId) return;
+
+    const updatedInfo = {
+        title: document.getElementById('edit-title').value,
+        author: document.getElementById('edit-author').value,
+        status: document.getElementById('edit-status').value
+    };
+    try {
+        const res = await fetch(`/api/book/${currentEditId}`,{
+            method: 'PUT',
+            headers: getAuthHeaders(),
+            body: JSON.stringify(updatedInfo)
+        });
+        const data = await res.json();
+        if (!res.ok) {
+            alert(data.error || 'Failed to update book details');
+            return;
+        }
+        const editModal = bootstrap.Modal.getInstance(document.getElementById('editBookModal'));
+        if (editModal) editBook.hide();
+        await fetchBooks();
+        renderBooks(cachedBooks);
+    } catch (err) {
+        console.error('Error updating book:', err);
+    }
+});
+
+// ===DELETE=== by id
+const deleteBook = async (id) => {
+    if (!confirm('Are you sure you want to delete this book?'))
+        return;
+    try {
+        const res = await fetch(`/api/books/${id}`, {
+            method: 'DELETE',
+            headers: { 'Authorization': `Bearer ${getToken()}`}
+        });
+        if (res.ok) {
+            alert('Book succesfully deleted');
+            await fetchBooks();
+            renderBooks(cachedBooks);
+        } 
+    } catch (err) {
+        console.error('Error deleting book:', err);
+    }
+};
+
+// =========================================
+// UI logic
+// =========================================
+
+// dark/ligth mode toggler
+themeToggleBtn.addEventListener('click', () => {
+    bodyElement.classList.toggle('dark-mode');
+    if (bodyElement.classList.contains('dark-mode')) {
+        themeToggleBtn.innerText = '☀️ Light mode';
+        themeToggleBtn.classList.replace('btn-outline-secondary', 'btn-outline-light');
+    } else {
+        themeToggleBtn.innerText = '🌙 Dark mode';
+        themeToggleBtn.classList.replace('btn-outline-light', 'btn-outline-secondary');
+    }
+});
 
 // render books into dom (to be displayed on demand)
 const renderBooks = (books) => {
@@ -84,8 +280,16 @@ const renderBooks = (books) => {
     });
 };
 
-// click to display whole book list
+// click logo to display whole book list
 showBookList.addEventListener('click', () => {
+    if (!getToken()) {
+        bookList.innerHTML = `
+            <div class="text-center text-muted py-5 w-100">
+                <p class="fs-4">Please sign in to check your library!</p>
+            </div>
+        `;
+        return;
+    }
     if (cachedBooks.length > 0) {
         renderBooks(cachedBooks);
     } else {
@@ -98,77 +302,43 @@ showBookList.addEventListener('click', () => {
     }
 });
 
-// Form submission (POST)
-addBook.addEventListener('submit', async (e) => {
+// login action
+loginForm.addEventListener('submit', async (e) => {
     e.preventDefault();
 
-    const title = document.getElementById('title').value;
-    const author = document.getElementById('author').value;
-    const status = document.getElementById('status').value;
+    const identifier = document.getElementById('loginIdentifier').value.trim;
+    const password = document.getElementById('loginPassword').value;
 
-    try {
-        const res = await fetch('/api/books', {
-            method: 'POST',
-            headers: { 'Content-Type': 'application/json'},
-            body: JSON.stringify({title, author, status})
-        });
-        const data = await res.json();
-        if (!res.ok) {    // displays any validaton or middleware error message
-            alert(data.error || (data.errors ? data.errors[0].msg: 'Failed to save the book'));
-            return;
-        }
-        addBook.reset();
+    await loginUser(identifier, password);
 
-        // to close form modal if open
-        const formModal = document.getElementById('addBookModal');
-        if (formModal) {
-            const modalInstance = bootstrap.Modal.getInstance(formModal);
-            if (modalInstance) modalInstance.hide();
-        }
-         await fetchBooks(); // refresh catalog 
-         renderBooks(cachedBooks);
-    } catch (err) {
-        console.error('Error adding book:', err);
-    }
+    const loginModal = bootstrap.Modal.getInstance(document.getElementById('loginModal'));
+    if (loginModal) loginModal.hide();
+    
+    loginForm.reset();
 });
 
-// DELETE by id
-const deleteBook = async (id) => {
-    if (!confirm('Are you sure you want to delete this book?'))
-        return;
-    try {
-        const res = await fetch(`/api/books/${id}`, {method: 'DELETE'});
-        if (res.ok) {
-            alert('Book succesfully deleted');
-            await fetchBooks();
-            renderBooks(cachedBooks);
-        } 
-    } catch (err) {
-        console.error('Error deleting book:', err);
-    }
+// register action
+registerForm.addEventListener('submit', async (e) => {
+    e.preventDefault();
+
+    const username = document.getElementById('signUpUsername').value;
+    const email = document.getElementById('signUpEmail').value;
+    const password = document.getElementById('signUpPassword').value;
+
+    await registerUser(username, email, password);
+
+    const registerModal = bootstrap.Modal.getInstance(document.getElementById('signUpModal'));
+    if (registerModal) registerModal.hide();
+
+    registerForm.reset();
+});
+
+if (getToken()) {
+    fetchBooks();
+} else {
+    bookList.innerHTML = `
+            <div class="text-center text-muted py-5 w-100">
+                <p class="fs-4">Welcome, Buddy!</p>
+            </div>
+        `;
 };
-
-// edit a book by id (PUT)
-// const openEditModal = async (id, updatedData) => {
-//     try {
-//         const res = await fetch(`/api/books/${id}`, {
-//             method: 'PUT',
-//             headers: { 'Content-Type': 'application/json'},
-//             body: JSON.stringify(updatedData)
-//         });
-//         const data = await res.json();
-//         if (!res.ok) {
-//             alert(data.error || 'Failed to updtade book details');
-//             return;
-//         }
-//         await fetchBooks();
-//         renderBooks(cachedBooks);
-//     } catch (err) {
-//         console.error('Error updating book:', err);
-//     }
-// };
-
-
-
-
-fetchBooks();
