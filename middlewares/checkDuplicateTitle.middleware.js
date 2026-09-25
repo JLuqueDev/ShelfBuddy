@@ -12,7 +12,7 @@ const checkDuplicateTitle = async (req, res, next) => {
     });
         if (existingBook) {
         return res.status(409).json({
-            error: `A book titled ${title} already exists in your catalog.`
+            error: `A book titled '${title}' already exists in your catalog.`
         });
         }
         next();

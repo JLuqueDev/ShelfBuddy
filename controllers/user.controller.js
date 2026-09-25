@@ -43,7 +43,7 @@ const register = async(req, res) => {
 // login of existing user
 const login = async (req, res) => {
     try {
-        console.log('Login Request Body:', req.body);
+        // console.log('Login Request Body:', req.body); for dev purposes
         const { identifier , password} = req.body;
 
         const formatedIdentifier = identifier.toLowerCase().trim();

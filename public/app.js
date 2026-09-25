@@ -158,10 +158,10 @@ addBook.addEventListener('submit', async (e) => {
 let currentEditId = null;
 /// 1. open modal and populate book info
 const openEditModal = (id) => {
-    const book = cachedBooks.find(b => b.id === id);
+    const book = cachedBooks.find(b => b._id === id);
     if (!book) return;
 
-    const currentEditId = id;    // saves id for the submission
+    currentEditId = id;    // saves id for the submission
 
     document.getElementById('edit-title').value = book.title;
     document.getElementById('edit-author').value = book.author;
@@ -180,8 +180,9 @@ editBook.addEventListener('submit', async(e) => {
         author: document.getElementById('edit-author').value,
         status: document.getElementById('edit-status').value
     };
+    console.log(updatedInfo);
     try {
-        const res = await fetch(`/api/book/${currentEditId}`,{
+        const res = await fetch(`/api/books/${currentEditId}`,{
             method: 'PUT',
             headers: getAuthHeaders(),
             body: JSON.stringify(updatedInfo)
@@ -191,10 +192,16 @@ editBook.addEventListener('submit', async(e) => {
             alert(data.error || 'Failed to update book details');
             return;
         }
-        const editModal = bootstrap.Modal.getInstance(document.getElementById('editBookModal'));
-        if (editModal) editBook.hide();
+        const editModalElement = document.getElementById('editBookModal');
+        const editModal = bootstrap.Modal.getInstance(editModalElement);
+        if (editModal) {
+            editModal.hide();
+        };
+
         await fetchBooks();
         renderBooks(cachedBooks);
+        alert('Book details updated!');
+
     } catch (err) {
         console.error('Error updating book:', err);
     }
@@ -335,10 +342,15 @@ registerForm.addEventListener('submit', async (e) => {
 
 if (getToken()) {
     fetchBooks();
-} else {
     bookList.innerHTML = `
             <div class="text-center text-muted py-5 w-100">
                 <p class="fs-4">Welcome, Buddy!</p>
+            </div>
+        `;
+} else {
+    bookList.innerHTML = `
+            <div class="text-center text-muted py-5 w-100">
+                <p class="fs-4">Welcome, Buddy! Sign in to check your books.</p>
             </div>
         `;
 };

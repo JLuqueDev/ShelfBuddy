@@ -15,7 +15,7 @@ router.get('/:id', verifyToken, validateBookId, bookController.getOneBook);
 router.post('/', verifyToken, validateBookBody, checkDuplicateTitle, bookController.createBook);
 
 // PUT to update a book
-router.put('/:id', verifyToken, validateBookId, bookController.editBook);
+router.put('/:id', verifyToken, validateBookId, checkDuplicateTitle, bookController.editBook);
 
 // DELETE book
 router.delete('/:id', verifyToken, validateBookId, bookController.deleteBook);

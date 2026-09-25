@@ -5,7 +5,7 @@ exports.getAllBooks = async (req, res) => {
     try {
         const books = await Book.find({user: req.user.id}).sort({createdAt: -1});
         res.json(books);
-        console.log('Full book list displayed!');
+        console.log('Full book list cached!');
     } catch (err) {
         res.status(500).json({ error: err.message });
         console.error('GET-a book.ctrl error', err.message);

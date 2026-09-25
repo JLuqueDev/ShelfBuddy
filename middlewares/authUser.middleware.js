@@ -20,7 +20,7 @@ const verifyToken = (req, res, next) => {
             return res.status(401).json({ msg: 'Invalid token format. Must be: Bearer <token>'});
         } 
         const decoded = jwt.verify(token, process.env.SECRET_KEY);
-        console.log('Decoded successfully:', decoded);
+        console.log('Authorized:', decoded);
         req.user = decoded;
         next();
     } catch (error) {

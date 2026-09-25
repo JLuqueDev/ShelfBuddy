@@ -21,7 +21,7 @@ Content-Type: application/json
 
 {
   "identifier": "batman@gotham.com",
-  "password": "supersecretpassword"
+  "password": "supersecretpasword"
 }
 
 ###
@@ -47,29 +47,34 @@ GET http://localhost:3000/api/books
 
 ###
 
-### Get Protected Books
+### Get Protected Books (email login)
 GET http://localhost:3000/api/books
-Authorization: Bearer eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpZCI6IjZhYjMxNDJjM2YxYjFhMjVmYjkzNGYyZCIsImlhdCI6MTc5MDE5MjgxMSwiZXhwIjoxNzkwMTk2NDExfQ.kVOEpaMPHXJbxGZkIZ6D7Luy3kpSsNvKk1wSzti6N3Y
+Authorization: Bearer {{loginWithEmail.response.body.token}}
 
-### POST (Create a new book)
-POST http://localhost:3000/api/books/
-Content-Type: application/json
+### Get Protected Books (username login)
+GET http://localhost:3000/api/books
+Authorization: Bearer {{loginWithUsername.response.body.token}}
 
-{
-  "title": "wrvqwrgfqw",
-  "author": "qwegrf",
-  "status": "To read"
-}
-
-###
 
 ### GET single book (Replace 12345 with a real _id from step 1)
 GET http://localhost:3000/api/books/6aacb51afb830b0dc5d
 
 ###
 
-### 4. PUT (Update a book - Replace 12345 with a real _id)
-PUT http://localhost:3000/api/books/6ab18af31c1d1dfde9bf58eb
+### 6. Create a Book under Logged-in User
+POST http://localhost:3000/api/books
+Authorization: Bearer {{loginWithEmail.response.body.token}}
+Content-Type: application/json
+
+{
+  "title": "The Dark Knight Returns",
+  "author": "Frank Miller",
+  "status": "Finished"
+}
+
+### PUT (Update a book - Replace 12345 with a real _id)
+PUT http://localhost:3000/api/books/6ab4b8ef8e04d1c4930d407e
+Authorization: Bearer {{loginWithEmail.response.body.token}}
 Content-Type: application/json
 
 {
@@ -78,6 +83,6 @@ Content-Type: application/json
 
 ###
 
-### 5. DELETE a book (Replace 12345 with a real _id)
-DELETE http://localhost:3000/api/books/6ab18af31c1d1dfde9bf58eb
-
+### DELETE a book (Replace 12345 with a real _id)
+DELETE http://localhost:3000/api/books/6ab4b8ef8e04d1c4930d407e
+Authorization: Bearer {{loginWithEmail.response.body.token}}
