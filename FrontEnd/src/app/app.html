@@ -1,0 +1,11 @@
+<app-header></app-header>
+
+<main class="container d-flex flex-column justify-content-center align-items-center hero-section">
+    <app-hero (showLibrary)="bookList()"></app-hero>
+
+    @if (displayBooks) {
+        <div class="w-100 mt-5">
+            <app-book-list></app-book-list>
+        </div>
+    }
+</main>

@@ -1,0 +1,32 @@
+<div class="row">
+    @for (book of books; track book._id) {
+        <div class="col-12 col-md-6 col-lg-4 mb-3">
+            <div class="card h-100 shadow-sm border-0 p-3">
+                <div class="card-body d-flex flex-wrap flex-column flex-md-row align-items-md-center justify-content-between gap-3">
+                    
+                    <div class="flex-grow-1">
+                        <span class="fw-medium fs-6" [class]="getStatusClass(book.status)">
+                            {{book.status}}
+                        </span>
+                        <h4 class="card-title w-75 fw-bold mb-1 fs-4" [title]="book.title">
+                            {{book.title}}
+                        </h4>
+                        <p class="card-subtitle text-muted mb-0 fs-5">
+                            by <span class="fw-medium text-dark">{{book.author}}</span>
+                        </p>
+                    </div>
+
+                    <div class="ms-md-auto gap-2 d-flex align-items-center">
+                        <button class="btn btn-outline-info" (click)="openEditModal(book._id!)">Edit</button>
+                        <button class="btn btn-outline-danger" (click)="deleteBook(book._id!)">Delete</button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
+    } @empty {
+        <div class="text-center text-muted py-5 w-100">
+            <p class="fs-4">No books found in your library. Add one to get stated!</p>
+        </div>
+    }
+</div>
