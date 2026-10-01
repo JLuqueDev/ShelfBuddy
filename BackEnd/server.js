@@ -1,12 +1,15 @@
 // dependencies access
 const express = require('express');
+// const cors = require('cors');
 const app = express();
+// app.use(cors());
 const mongoose = require('mongoose');
 require('dotenv').config();
 const bookRoutes = require('./routes/bookRoutes')
 const userRoutes = require('./routes/userRoutes');
 
 // global middlewares
+
 app.use(express.json());
 app.use(express.static('public'));
 
