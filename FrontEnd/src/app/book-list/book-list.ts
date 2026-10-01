@@ -9,8 +9,10 @@ import { Book } from '../models/bookModel';
 })
 export class BookList {
 
+  // for the emitter to work:
   @Output() editBook = new EventEmitter<Book>();
 
+  // mock book list to be replaced with DB logic (later)
   books: Book[] = [
    { _id: '1', title: 'The Hobbit', author: 'J.R.R. Tolkien', status: 'Finished' },
     { _id: '2', title: 'Dune', author: 'Frank Herbert', status: 'Reading' }
@@ -25,10 +27,12 @@ export class BookList {
     }
   }
 
+  // notifies signal with book info to parent to open the edit modal
   onEditClick(book: Book): void {
     this.editBook.emit(book);
   }
 
+  // notifies signal with book id to parent to eliminate it 
   deleteBook(id: string): void {
     console.log('Delete clicked for', id);
   }

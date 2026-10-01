@@ -20,23 +20,25 @@ export class App {
 
   // book section visible/invisible
   displayBooks: boolean = false;
+
+  // take signal (showLibrary) from logo 
   bookList(): void {
-    // console.log('2. App shell received the event!');
+    console.log('App shell received the displaybooks event!');
     this.displayBooks = true;
   }
 
-  // 
+  // empty or not book variable
   selectedBook: Book | null = null;
 
-  // to create new book
+  // takes signal (openAddModal) from searchbar and makes it empty to create a book 
   openAddModal(): void {
     this.selectedBook = null;
   }
-  // to edit existing book
+  // takes signal (editBook) from bookList and puts Book values on it to edit 
   openEditModal(book: Book): void {
     this.selectedBook = book;
   }
-  // to handle data from edit/new modal
+  // takes signal (saveBook) from bookModal and renders logic
   handleSaveBook(bookData: Partial<Book>): void {
     if (bookData._id) {
       console.log('Updating existing book (PUT):', bookData);

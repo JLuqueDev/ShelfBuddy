@@ -8,8 +8,10 @@ import { Component, EventEmitter, Output } from '@angular/core';
 })
 export class Hero {
 
+  // for emitter to work
   @Output() showLibrary = new EventEmitter<void>();
 
+  // notifies signal to parent to show books list
   showLibraryClick(): void {
     console.log('1. Hero logo was clicked!'); // Tests if the HTML click works
     this.showLibrary.emit();
