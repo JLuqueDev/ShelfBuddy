@@ -17,7 +17,13 @@
                     </div>
 
                     <div class="ms-md-auto gap-2 d-flex align-items-center">
-                        <button class="btn btn-outline-info" (click)="openEditModal(book._id!)">Edit</button>
+                        <button 
+                            class="btn btn-outline-info" 
+                            data-bs-toggle="modal"
+                            data-bs-target="#bookModal"
+                            (click)="onEditClick(book)">
+                            Edit
+                        </button>
                         <button class="btn btn-outline-danger" (click)="deleteBook(book._id!)">Delete</button>
                     </div>
 

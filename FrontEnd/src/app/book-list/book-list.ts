@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 import { Book } from '../models/bookModel';
 
 @Component({
@@ -8,6 +8,8 @@ import { Book } from '../models/bookModel';
   templateUrl: './book-list.html',
 })
 export class BookList {
+
+  @Output() editBook = new EventEmitter<Book>();
 
   books: Book[] = [
    { _id: '1', title: 'The Hobbit', author: 'J.R.R. Tolkien', status: 'Finished' },
@@ -23,8 +25,8 @@ export class BookList {
     }
   }
 
-  openEditModal(id: string): void {
-    console.log('Edit clicked for', id);
+  onEditClick(book: Book): void {
+    this.editBook.emit(book);
   }
 
   deleteBook(id: string): void {

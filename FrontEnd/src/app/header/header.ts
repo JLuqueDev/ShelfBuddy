@@ -21,7 +21,7 @@ export class Header {
     }
   }
   openLoginModal(): void {
-    console.log('Login modal requested!')
+    console.log('Login modal requested!');
   }
 }
 

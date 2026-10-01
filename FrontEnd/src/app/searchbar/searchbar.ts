@@ -1,4 +1,4 @@
-import { Component } from '@angular/core';
+import { Component, EventEmitter, Output } from '@angular/core';
 
 @Component({
   imports: [],
@@ -6,4 +6,16 @@ import { Component } from '@angular/core';
   styleUrl: './searchbar.css',
   templateUrl: './searchbar.html',
 })
-export class Searchbar {}
+export class Searchbar {
+
+  @Output() openAddModal = new EventEmitter<void>();
+
+  onSearch(event: Event): void {
+    event.preventDefault();
+    console.log('Search triggered (PH)')
+  }
+
+  onAddBook(): void {
+    this.openAddModal.emit();
+  }
+}

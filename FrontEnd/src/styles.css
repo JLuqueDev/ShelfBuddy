@@ -35,6 +35,9 @@ body.dark-mode .form-control {
     color: #f8f9fa;
     border-color: #6c757d;
 }
+body.dark-mode .form-control::placeholder {
+    color: #6c757d;
+}
 
 .btn-primary {
     background-color: #6e5205c8 !important;
