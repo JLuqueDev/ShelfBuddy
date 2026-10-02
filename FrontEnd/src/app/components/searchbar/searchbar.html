@@ -1,0 +1,19 @@
+<search class="w-100 mb-4">
+    <form class="d-flex flex-column gap-3" 
+        id="search-form" 
+        (submit)="onSearch($event)">
+        <input type="search" 
+                class="form-control form-control-lg rounded-pill shadow-sm" 
+                placeholder="Search by title or author..." aria-label="Search Library">
+        <div class="d-flex justify-content-center gap-2">
+            <button class="btn btn-light border"
+                type="submit">Search Library</button>
+            <button class="btn btn-light border" 
+                type="button"
+                data-bs-toggle="modal"
+                data-bs-target="#bookModal"
+                (click)="onAddBook()"
+                >Add New Book</button>
+        </div>
+    </form>
+</search>

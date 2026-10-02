@@ -1,0 +1,89 @@
+<div class="modal fade" id="authModal" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered">
+        <div class="modal-content">
+
+            <header class="modal-header row border-0">
+                <h2 class="h5 modal-title text-center col-11 fw-bold">
+                    {{ isLoginMode ? 'Log into your Shelf!' : 'Create your account!'}}
+                </h2>
+                <button type="button" class="btn-close col-1 mx-0" data-bs-dismiss="modal" aria-label="Close"></button>
+            </header>
+
+            <div class="modal-body">
+
+                <form (ngSubmit)="onSubmit()">
+                    <fieldset>
+                        <legend class="visually-hidden">Authentication form</legend>
+                        <!-- login mode: username OR email -->
+                        @if (isLoginMode) {
+                            <div class="mb-3">
+                            <label for="identifier" class="form-label">Username or Email</label>
+                            <input 
+                                type="text"
+                                class="form-control"
+                                id="identifier"
+                                name="identifier"
+                                [(ngModel)]="identifier"
+                                placeholder="e.g. bookwork99 or user@example.com"
+                                required/>
+                        </div>
+                        }
+                        <!-- register mode: username AND email -->
+                        @else {
+                            <div class="mb-3">
+                                <label for="username" class="form-label">Username</label>
+                                <input 
+                                    type="text" 
+                                    class="form-control"
+                                    name="username" 
+                                    id="username"
+                                    [(ngModel)]="username"
+                                    placeholder="e.g. bookworm99"
+                                    required />
+                            </div>
+        
+                            <div class="mb-3">
+                                <label for="email" class="form-label">Email</label>
+                                    <input 
+                                        type="email" 
+                                        class="form-control"
+                                        name="email" 
+                                        id="email"
+                                        [(ngModel)]="email"
+                                        placeholder="name@example.com"
+                                        required />
+                        </div>
+                        }
+                        <!-- password: always visible -->
+                         <div class="mb-3">
+                            <label for="password" class="form-label">Password</label>
+                            <input 
+                                type="password"
+                                class="form-control"
+                                id="password"
+                                name="password"
+                                [(ngModel)]="password"
+                                required />
+                         </div>
+                    </fieldset>
+                    <footer class="d-flex flex-column gap-3 mt-2">
+                        <button type="submit" class="btn btn-primary w-100" data-bs-dismiss="modal">
+                            {{ isLoginMode ? 'Login' : 'Register'}}
+                        </button>
+                        <p>
+                            {{ isLoginMode ? "Don't have an account?" : "Already have an account?"}}
+                            <button
+                                type="button"
+                                class="btn btn-link p-0 small text-decoration-none fw-bold"
+                                (click)="toggleMode()">
+                                {{ isLoginMode ? 'Sign up!' : 'Log in' }}
+                            </button>
+                        </p>
+                    </footer>
+                </form>
+            </div>
+        </div>
+
+    </div>
+
+</div>

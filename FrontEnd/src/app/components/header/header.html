@@ -1,0 +1,19 @@
+<header class="d-flex justify-content-between p-3">
+
+    <button class="btn" 
+            type="button" 
+            [class.btn-outline-secondary]="!isDarkMode"
+            [class.btn-outline-light]="isDarkMode"
+            (click)="toggleTheme()">
+       {{ isDarkMode ? '☀️ Light mode' : ' 🌙 Dark mode' }}
+    </button>
+
+    <button class="btn btn-outline-light btn-primary" 
+        type="button" 
+        data-bs-toggle="modal"
+        data-bs-target="#authModal"
+       >
+        Login || Register
+    </button>
+    
+</header>

@@ -1,0 +1,25 @@
+<app-header></app-header>
+
+<main class="container d-flex flex-column justify-content-center align-items-center hero-section">
+
+    <app-hero (showLibrary)="bookList()"></app-hero>
+
+    <app-searchbar (openAddModal)="openAddModal()"></app-searchbar>
+
+    @if (displayBooks) {
+        <div class="w-100 mt-3">
+            <app-book-list (editBook)="openEditModal($event)"></app-book-list>
+        </div>
+    }
+</main>
+
+<app-book-modal
+    [bookToEdit]="selectedBook"
+    (saveBook)="handleSaveBook($event)">
+</app-book-modal>
+
+<app-auth-modal
+    (submitAuth)="handleAuthSubmit($event)">
+</app-auth-modal>
+
+<app-footer></app-footer>
