@@ -1,6 +1,6 @@
 import { Component, Input, EventEmitter, OnChanges, Output, SimpleChanges } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { Book } from '../../models/bookModel';
+import { Book } from '../../interfaces/book';
 
 @Component({
   imports: [FormsModule],

@@ -1,6 +1,6 @@
 import { Component, EventEmitter, Output } from '@angular/core';
 import { FormsModule } from '@angular/forms';
-import { AuthPayload } from '../../models/authModel';
+import { AuthPayload } from '../../interfaces/user';
 
 @Component({
   imports: [FormsModule],
