@@ -7,9 +7,11 @@ import { Searchbar } from './searchbar/searchbar';
 import { Footer } from './footer/footer';
 import { BookModal } from './book-modal/book-modal';
 import { Book } from './models/bookModel';
+import { AuthModal } from './auth-modal/auth-modal';
+import { AuthPayload } from './models/authModel';
 
 @Component({
-  imports: [ Header, Hero, Searchbar, BookList, Footer, BookModal],
+  imports: [ Header, Hero, Searchbar, BookList, Footer, BookModal, AuthModal],
   selector: 'app-root',
   styleUrl: './app.css',
   templateUrl: './app.html',
@@ -18,10 +20,10 @@ import { Book } from './models/bookModel';
 export class App {
   protected readonly title = signal('FrontEnd');
 
-  // book section visible/invisible
+  // book section invisible by default
   displayBooks: boolean = false;
 
-  // take signal (showLibrary) from logo 
+  // take signal (showLibrary) from hero logo and displays book list
   bookList(): void {
     console.log('App shell received the displaybooks event!');
     this.displayBooks = true;
@@ -44,6 +46,17 @@ export class App {
       console.log('Updating existing book (PUT):', bookData);
     } else {
       console.log('Adding new book (POST):', bookData);
+    }
+  }
+
+  // takes signal (submitAuth) from authModal and renders user logic
+  handleAuthSubmit(event: AuthPayload): void {
+    if (event.mode === 'login') {
+      console.log('Loggin in!', event.data);
+      // API call: POST /api/users/login with event.data
+    } else {
+      console.log('Registering user:', event.data);
+      // Future API call: POST /api/users/register with event.data
     }
   }
 }

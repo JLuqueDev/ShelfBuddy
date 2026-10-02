@@ -13,7 +13,7 @@ export class Hero {
 
   // notifies signal to parent to show books list
   showLibraryClick(): void {
-    console.log('1. Hero logo was clicked!'); // Tests if the HTML click works
+    console.log('Hero logo clicked!'); // Tests if the HTML click works
     this.showLibrary.emit();
   }
 }

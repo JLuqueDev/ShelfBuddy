@@ -24,11 +24,6 @@ export class Header {
       document.body.classList.remove('dark-mode');
     }
   }
-
-  // tells parent to open Auth modal
-  openLoginModal(): void {
-    console.log('Login modal requested!');
-  }
 }
 
 

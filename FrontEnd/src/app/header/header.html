@@ -8,7 +8,11 @@
        {{ isDarkMode ? '☀️ Light mode' : ' 🌙 Dark mode' }}
     </button>
 
-    <button class="btn btn-primary" type="button" (click)="openLoginModal()">
+    <button class="btn btn-outline-light btn-primary" 
+        type="button" 
+        data-bs-toggle="modal"
+        data-bs-target="#authModal"
+       >
         Login || Register
     </button>
     
