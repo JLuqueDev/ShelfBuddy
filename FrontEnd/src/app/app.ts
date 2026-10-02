@@ -1,13 +1,13 @@
 import { Component, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
-import { Header } from './header/header';
-import { Hero } from './hero/hero';
-import { BookList } from './book-list/book-list';
-import { Searchbar } from './searchbar/searchbar';
-import { Footer } from './footer/footer';
-import { BookModal } from './book-modal/book-modal';
+import { Header } from './components/header/header';
+import { Hero } from './components/hero/hero';
+import { BookList } from './components/book-list/book-list';
+import { Searchbar } from './components/searchbar/searchbar';
+import { Footer } from './components/footer/footer';
+import { BookModal } from './components/book-modal/book-modal';
 import { Book } from './models/bookModel';
-import { AuthModal } from './auth-modal/auth-modal';
+import { AuthModal } from './components/auth-modal/auth-modal';
 import { AuthPayload } from './models/authModel';
 
 @Component({
