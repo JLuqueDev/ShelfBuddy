@@ -1,4 +1,4 @@
-import { Component, signal } from '@angular/core';
+import { Component, inject, signal } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 //comps
 import { Header } from './components/header/header';
@@ -11,6 +11,8 @@ import { AuthModal } from './components/auth-modal/auth-modal';
 //models
 import { Book } from './interfaces/book';
 import { AuthPayload } from './interfaces/user';
+// services 
+import { AuthService } from './services/auth';
 
 @Component({
   imports: [ Header, Hero, Searchbar, BookList, Footer, BookModal, AuthModal],
@@ -21,6 +23,53 @@ import { AuthPayload } from './interfaces/user';
 
 export class App {
   protected readonly title = signal('FrontEnd');
+
+  // =========================================
+  // AUTHENTICATION logic: register/login with jwt
+  // =========================================
+
+  // importing authentication service
+  private authService = inject(AuthService);
+
+  // takes signal (submitAuth) from authModal and renders user logic
+  handleAuthSubmit(event: AuthPayload): void {
+    //verifies if user is in login mode and runs login logic
+    if (event.mode === 'login') {
+      // makes the request to db
+      this.authService.login(event.data).subscribe({
+        // if backend answers successfully (2xx code), triggers this:
+        next: (res) => {
+          console.log('Login successfull and JWT stored:', res.token);
+          // alert('Logged in successfully!');
+          window.location.reload();
+        }, 
+         // if backend replies an error (like 4xx code), runs this:
+        error: (err) => {
+          console.error('Login failed:', err.error?.msg || err.message);
+          alert(err.error?.msg || 'Login failed!');
+        }
+      });
+    } else {
+      // if not in login mode, runs register mode logic 
+      this.authService.register(event.data).subscribe({
+        // if backend answers successfully (2xx code), triggers this:
+        next: (res) => {
+          console.log('Registration successful:', res.msg);
+          alert('Account created successfully! You can login now.');
+        },
+        // if backend replies an error (like 4xx code), runs this:
+        error: (err) => {
+          console.error('Registration failed:', err.error?.msg || err.message);
+          alert(err.error?.msg || 'registration failed');
+        }
+      });
+    }
+  }
+
+
+  // =========================================
+  // UI logic
+  // =========================================
 
   // book section invisible by default
   displayBooks: boolean = false;
@@ -42,6 +91,9 @@ export class App {
   openEditModal(book: Book): void {
     this.selectedBook = book;
   }
+
+
+
   // takes signal (saveBook) from bookModal and renders logic
   handleSaveBook(bookData: Partial<Book>): void {
     if (bookData._id) {
@@ -51,15 +103,6 @@ export class App {
     }
   }
 
-  // takes signal (submitAuth) from authModal and renders user logic
-  handleAuthSubmit(event: AuthPayload): void {
-    if (event.mode === 'login') {
-      console.log('Loggin in!', event.data);
-      // API call: POST /api/users/login with event.data
-    } else {
-      console.log('Registering user:', event.data);
-      // Future API call: POST /api/users/register with event.data
-    }
-  }
+  
 }
 

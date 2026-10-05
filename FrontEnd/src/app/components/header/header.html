@@ -8,12 +8,22 @@
        {{ isDarkMode ? '☀️ Light mode' : ' 🌙 Dark mode' }}
     </button>
 
-    <button class="btn btn-outline-light btn-primary" 
+    @if (authService.isLoggedIn()) {
+        <span class="text-success align-self-center fw-semibold d-none d-md-inline">
+            Hi {{ authService.getUsername() }}! What are you reading today?
+        </span>
+        <button class="btn btn-outline-danger" (click)="authService.logout()"
+            >Logout
+        </button>
+    } @else {
+        <button class="btn btn-outline-light btn-primary" 
         type="button" 
         data-bs-toggle="modal"
         data-bs-target="#authModal"
        >
         Login || Register
-    </button>
+        </button>
+    }
+    
     
 </header>

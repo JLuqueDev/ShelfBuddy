@@ -1,4 +1,6 @@
-import { Component } from '@angular/core';
+import { Component, inject } from '@angular/core';
+import { AuthService } from '../../services/auth';
+
 
 @Component({
   imports: [],
@@ -24,6 +26,9 @@ export class Header {
       document.body.classList.remove('dark-mode');
     }
   }
+
+  // import auth service to read login status and swap login button to logout.
+  public authService = inject(AuthService);
 }
 
 
