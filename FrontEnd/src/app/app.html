@@ -8,7 +8,11 @@
 
     @if (displayBooks) {
         <div class="w-100 mt-3">
-            <app-book-list (editBook)="openEditModal($event)"></app-book-list>
+            <app-book-list 
+                [books]="books"
+                (editBook)="openEditModal($event)"
+                (deleteBook)="handleDeleteBook($event)">
+            </app-book-list>
         </div>
     }
 </main>

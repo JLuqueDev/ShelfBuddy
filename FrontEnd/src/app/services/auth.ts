@@ -1,5 +1,5 @@
 import { HttpClient } from "@angular/common/http";
-import { Injectable, inject } from "@angular/core";
+import { Injectable, inject, signal } from "@angular/core";
 import { Observable, tap } from "rxjs";
 import { LoginPayload, RegisterPayload } from "../interfaces/user";
 
@@ -18,12 +18,17 @@ export class AuthService {
         return this.http.post<{ msg: string}> (`${this.apiURL}/register`, credentials);
     }
 
+    // signal to hold current username or null
+    currentUser = signal<string | null>(this.getUsernameFromToken());
+
     //login endpoint
     login(credentials: LoginPayload): Observable<{ token: string}> {
         return this.http.post<{ token: string }> (`${this.apiURL}/login`, credentials).pipe(
             tap(response => {
                 if (response.token) {
                     localStorage.setItem(this.tokenKey, response.token);
+                    // updates signal on login
+                    this.currentUser.set(this.getUsernameFromToken());
                 }
             })
         );
@@ -35,23 +40,22 @@ export class AuthService {
 
     // to clean token on logout and reload whole page
     logout(): void {
+        if (confirm('Are you sure you want to log out?')) {
         localStorage.removeItem(this.tokenKey);
-        window.location.reload();
-    }
-    //check auth status
-    isLoggedIn(): boolean {
-        return !!this.getToken();
+        // clears signal on logout
+        this.currentUser.set(null);
+        }
     }
 
     // to get the username from the JWT
-    getUsername(): string {
+    private getUsernameFromToken(): string | null {
         const token = this.getToken();
-        if (!token) return '';
+        if (!token) return null;
         try {
             const payload = JSON.parse(atob(token.split('.')[1]));
             return payload.username;
         } catch (e) {
-            return '';
+            return null;
         }
     }
 }

@@ -10,7 +10,7 @@ const userRoutes = require('./routes/userRoutes');
 // global middlewares
 app.use(cors());
 app.use(express.json());
-app.use(express.static('public'));
+// app.use(express.static('public'));
 
 // database conection 
 const dbConnection = require('./config/db');

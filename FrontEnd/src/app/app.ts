@@ -13,6 +13,7 @@ import { Book } from './interfaces/book';
 import { AuthPayload } from './interfaces/user';
 // services 
 import { AuthService } from './services/auth';
+import { BookService } from './services/book';
 
 @Component({
   imports: [ Header, Hero, Searchbar, BookList, Footer, BookModal, AuthModal],
@@ -41,7 +42,8 @@ export class App {
         next: (res) => {
           console.log('Login successfull and JWT stored:', res.token);
           // alert('Logged in successfully!');
-          window.location.reload();
+          this.loadBooks();
+          // window.location.reload();
         }, 
          // if backend replies an error (like 4xx code), runs this:
         error: (err) => {
@@ -66,18 +68,72 @@ export class App {
     }
   }
 
+  // =========================================
+  // CRUD logic
+  // =========================================
+
+  // importing book service
+  private bookService = inject(BookService);
+
+  //default state for library
+  books: Book[] = [];
+
+  // GET ALL books and keep them in memory only
+  loadBooks(): void {
+    this.bookService.getBooks().subscribe({
+      next: (data) => {
+        this.books = data;
+        console.log('Books cached:', this.books.length);
+      },
+      error: (err) => console.error('Failed to ferch books', err)
+    });
+  }
+
+  // POST/PUT, takes signal (saveBook) from bookModal and renders logic
+  handleSaveBook(bookData: Partial<Book>): void {
+    if (bookData._id) {
+      //if it has an ID, updates(PUT) it
+      this.bookService.updateBook(bookData._id, bookData).subscribe({
+        next: () => this.loadBooks(), // refreshe list on success
+        error: (err) => alert(err.error?.error || 'Failed to update book')
+      });
+    } else {
+      //No ID, so add (POST) a new book
+      this.bookService.addBook(bookData).subscribe({
+        next: () => this.loadBooks(), //refreshes on success
+        error: (err) => alert(err.error?.error || 'Failed to add book')
+      });
+    }
+  }
+
+  // DELETE 
+  handleDeleteBook(id: string): void {
+    if (confirm('Are you sure you want to delete this book?')) {
+      this.bookService.deleteBook(id).subscribe({
+        next: () => this.loadBooks(), //refreshes on success
+        error: (err) => console.error('Failed to delete book', err)
+      });
+    }
+  }
 
   // =========================================
   // UI logic
   // =========================================
 
-  // book section invisible by default
+  //  to cache books in memory on page load
+  ngOnInit(): void {
+    if (this.authService.currentUser()) {
+      this.loadBooks(); // to silentyl cache books in memory
+    }
+  }
+
+   // book section invisible by default
   displayBooks: boolean = false;
 
   // take signal (showLibrary) from hero logo and displays book list
   bookList(): void {
-    console.log('App shell received the displaybooks event!');
-    this.displayBooks = true;
+    console.log('Root received the displaybooks event!');
+    this.displayBooks = !this.displayBooks;
   }
 
   // empty or not book variable
@@ -92,17 +148,5 @@ export class App {
     this.selectedBook = book;
   }
 
-
-
-  // takes signal (saveBook) from bookModal and renders logic
-  handleSaveBook(bookData: Partial<Book>): void {
-    if (bookData._id) {
-      console.log('Updating existing book (PUT):', bookData);
-    } else {
-      console.log('Adding new book (POST):', bookData);
-    }
-  }
-
-  
 }
 

@@ -8,9 +8,9 @@
        {{ isDarkMode ? '☀️ Light mode' : ' 🌙 Dark mode' }}
     </button>
 
-    @if (authService.isLoggedIn()) {
-        <span class="text-success align-self-center fw-semibold d-none d-md-inline">
-            Hi {{ authService.getUsername() }}! What are you reading today?
+    @if (authService.currentUser()) {
+        <span class="text-success align-self-center fw-normal d-none d-md-inline">
+            Hi <strong>{{ authService.currentUser() }}</strong>! What are you reading today?
         </span>
         <button class="btn btn-outline-danger" (click)="authService.logout()"
             >Logout

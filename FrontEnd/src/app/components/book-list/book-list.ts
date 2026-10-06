@@ -1,4 +1,4 @@
-import { Component, EventEmitter, Output } from '@angular/core';
+import { Component, EventEmitter, Input, Output } from '@angular/core';
 import { Book } from '../../interfaces/book';
 
 @Component({
@@ -9,14 +9,13 @@ import { Book } from '../../interfaces/book';
 })
 export class BookList {
 
+  // to receive data from parent 
+  @Input() books: Book[] = [];
+
   // for the emitter to work:
   @Output() editBook = new EventEmitter<Book>();
+  @Output() deleteBook = new EventEmitter<string>();
 
-  // mock book list to be replaced with DB logic (later)
-  books: Book[] = [
-   { _id: '1', title: 'The Hobbit', author: 'J.R.R. Tolkien', status: 'Finished' },
-    { _id: '2', title: 'Dune', author: 'Frank Herbert', status: 'Reading' }
-  ];
   // bagde colors
   getStatusClass(status: string): string {
     switch (status) {
@@ -33,7 +32,9 @@ export class BookList {
   }
 
   // notifies signal with book id to parent to eliminate it 
-  deleteBook(id: string): void {
-    console.log('Delete clicked for', id);
+  deleteClick(id?: string): void {
+    if (id) {
+      this.deleteBook.emit(id);
+    }
   }
 }
