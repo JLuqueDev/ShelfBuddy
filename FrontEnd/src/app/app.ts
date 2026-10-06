@@ -1,4 +1,4 @@
-import { Component, inject, signal } from '@angular/core';
+import { Component, inject, signal, effect, OnInit } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 //comps
 import { Header } from './components/header/header';
@@ -22,7 +22,7 @@ import { BookService } from './services/book';
   templateUrl: './app.html',
 })
 
-export class App {
+export class App implements OnInit {
   protected readonly title = signal('FrontEnd');
 
   // =========================================
@@ -30,7 +30,7 @@ export class App {
   // =========================================
 
   // importing authentication service
-  private authService = inject(AuthService);
+  public authService = inject(AuthService);
 
   // takes signal (submitAuth) from authModal and renders user logic
   handleAuthSubmit(event: AuthPayload): void {
@@ -42,7 +42,7 @@ export class App {
         next: (res) => {
           console.log('Login successfull and JWT stored:', res.token);
           // alert('Logged in successfully!');
-          this.loadBooks();
+          this.loadBooks(); //fetch and cache books for new logged user
           // window.location.reload();
         }, 
          // if backend replies an error (like 4xx code), runs this:
@@ -120,25 +120,42 @@ export class App {
   // UI logic
   // =========================================
 
-  //  to cache books in memory on page load
+  // ON PAGE LOAD:
   ngOnInit(): void {
     if (this.authService.currentUser()) {
-      this.loadBooks(); // to silentyl cache books in memory
+      this.loadBooks(); // to silently cache books in memory
     }
   }
 
-   // book section invisible by default
+  // AUTOMATIC CLEANUP ON USER CHANGE/LOGOUT
+  constructor() {
+    // reactive cleanup to repond on currentUser updates
+    effect(() => {
+      if (!this.authService.currentUser()) {
+        this.books = []; // to wipe books from cache
+        this.displayBooks = false; // hides the library UI
+      }
+    });
+  }
+  
+  // ACTION LOGO BUTTON: 
+  // book section invisible by default
   displayBooks: boolean = false;
-
   // take signal (showLibrary) from hero logo and displays book list
   bookList(): void {
     console.log('Root received the displaybooks event!');
+    if (!this.authService.currentUser()) {
+      alert('Please register or log in to view your personal library!')
+      return;
+    }
     this.displayBooks = !this.displayBooks;
   }
 
+  // 
+
+  // EDIT OR ADD BOOK MODAL:  
   // empty or not book variable
   selectedBook: Book | null = null;
-
   // takes signal (openAddModal) from searchbar and makes it empty to create a book 
   openAddModal(): void {
     this.selectedBook = null;
