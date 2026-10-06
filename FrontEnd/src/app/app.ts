@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, OnInit } from '@angular/core';
+import { Component, inject, signal, effect, OnInit, } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 //comps
 import { Header } from './components/header/header';
@@ -75,15 +75,16 @@ export class App implements OnInit {
   // importing book service
   private bookService = inject(BookService);
 
-  //default state for library
-  books: Book[] = [];
+  //turning books array into a signal
+  books = signal<Book[]>([]);
 
   // GET ALL books and keep them in memory only
   loadBooks(): void {
     this.bookService.getBooks().subscribe({
       next: (data) => {
-        this.books = data;
-        console.log('Books cached:', this.books.length);
+        // set book signal with fetched data 
+        this.books.set(data);
+        console.log('Books cached:', this.books().length);
       },
       error: (err) => console.error('Failed to ferch books', err)
     });
@@ -107,10 +108,13 @@ export class App implements OnInit {
   }
 
   // DELETE 
-  handleDeleteBook(id: string): void {
+  deleteClick(id: string): void {
     if (confirm('Are you sure you want to delete this book?')) {
       this.bookService.deleteBook(id).subscribe({
-        next: () => this.loadBooks(), //refreshes on success
+        next: () => {
+          // to update the book signal reactively
+          this.books.update(currentBooks => currentBooks.filter(book => book._id !== id));
+        }, 
         error: (err) => console.error('Failed to delete book', err)
       });
     }
@@ -132,7 +136,7 @@ export class App implements OnInit {
     // reactive cleanup to repond on currentUser updates
     effect(() => {
       if (!this.authService.currentUser()) {
-        this.books = []; // to wipe books from cache
+        this.books.set([]); // reset book signal on logout
         this.displayBooks = false; // hides the library UI
       }
     });
