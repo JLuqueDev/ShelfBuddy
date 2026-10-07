@@ -16,4 +16,7 @@ const bookSchema = new mongoose.Schema({
     }
 }, {timestamps:true});
 
+// for each book title to be unique per user
+bookSchema.index({ title: 1, user: 1}, {unique: true});
+
 module.exports = mongoose.model('Book', bookSchema);

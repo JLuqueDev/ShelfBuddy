@@ -31,11 +31,9 @@ export class BookModal {
     }
   }
 
-
   // takes new (edited or added) data and stores it in variable, 
   onSubmit(): void {
+    // console.log('Submitting formData:', this.formData);
     this.saveBook.emit(this.formData);
     }
-
-  
 }
