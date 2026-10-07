@@ -1,6 +1,6 @@
 const Book = require('../models/Book');
 
-// GET all books
+// GET all books for the authenticated user
 exports.getAllBooks = async (req, res) => {
     try {
         const books = await Book.find({user: req.user.id}).sort({createdAt: -1});
@@ -37,11 +37,14 @@ exports.createBook = async (req, res) => {
             user: req.user.id
         });
         const savedBook = await newBook.save();
-        res.status(201).json({savedBook, message: 'Book logged successfully!'});
+        res.status(201).json(savedBook);
         console.log('Book logged successfully!');
     } catch (err) {
-        res.status(400).json({ error: err.message});
-        console.error('POST book.ctrl error', err.message);
+        console.error('POST book.ctrl error:', err.message);
+        if (err.code === 11000) {
+           return res.status(400).json({ error: 'A book with this title already exists in your library.'});
+        }
+        res.status(400).json({ error: err.message });
     }
 };
 
@@ -49,16 +52,21 @@ exports.createBook = async (req, res) => {
 exports.editBook = async (req, res) => {
     try {
         const updatedBook = await Book.findByIdAndUpdate(
-            req.params.id,
+            //to enforce user ownership 
+            { _id: req.params.id, user: req.user.id },
             req.body,
             { returnDocument: 'after', runValidators: true}
         );
-        if (!updatedBook) return res.status(404).json({ message: 'Book not found'});
-        res.json({updatedBook, message: 'Info updated successfully!'});
+        if (!updatedBook) return res.status(404).json({ message: 'Book not found or unauthorized'});
+        res.json(updatedBook);
         console.log('Info updated successfully!');
+
     } catch (err) {
-        res.status(400).json({ error: err.message});
         console.error('PUT book.ctrl error', err.message);
+        if (err.code === 11000) {
+            return res.status(400).json({ error: 'A book with this title already exists in your library.'});
+        }
+        res.status(400).json({ error: err.message });
     }
 };
 
