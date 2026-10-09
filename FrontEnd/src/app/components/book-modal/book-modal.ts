@@ -1,5 +1,5 @@
-import { Component, Input, EventEmitter, OnChanges, Output, SimpleChanges, inject } from '@angular/core';
-import { ReactiveFormsModule, FormBuilder, FormGroup, Validators, FormsModule } from '@angular/forms';
+import { Component, Input, EventEmitter, Output, inject } from '@angular/core';
+import { ReactiveFormsModule, FormBuilder, FormGroup, Validators } from '@angular/forms';
 import { Book } from '../../interfaces/book';
 import { Title } from '@angular/platform-browser';
 

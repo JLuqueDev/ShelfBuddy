@@ -11,35 +11,43 @@
 
             <div class="modal-body">
 
-                <form (ngSubmit)="onSubmit()">
+                <form [formGroup]="authForm" (ngSubmit)="onSubmit()">
                     <fieldset>
                         <legend class="visually-hidden">Authentication form</legend>
                         <!-- login mode: username OR email -->
                         @if (isLoginMode) {
                             <div class="mb-3">
-                            <label for="identifier" class="form-label">Username or Email</label>
-                            <input 
-                                type="text"
-                                class="form-control"
-                                id="identifier"
-                                name="identifier"
-                                [(ngModel)]="identifier"
-                                placeholder="e.g. bookwork99 or user@example.com"
-                                required/>
-                        </div>
-                        }
+                                <label class="form-label">Username or Email</label>
+                                <input 
+                                    type="text"
+                                    class="form-control"
+                                    formControlName="identifier"
+                                    [class.is-invalid]="identifierControl?.invalid && identifierControl?.touched"
+                                    placeholder="e.g. bookworm99 or user@example.com"
+                                    />
+                                @if (identifierControl?.invalid && identifierControl?.touched) {
+                                    <div class="invalid-feedback">
+                                        Username or email is required.
+                                    </div>
+                                }
+                            </div>
+                        } @else {
                         <!-- register mode: username AND email -->
-                        @else {
                             <div class="mb-3">
-                                <label for="username" class="form-label">Username</label>
+                                <label class="form-label">Username</label>
                                 <input 
                                     type="text" 
                                     class="form-control"
-                                    name="username" 
-                                    id="username"
-                                    [(ngModel)]="username"
+                                    formControlName="username" 
+                                    [class.is-invalid]="usernameControl?.invalid && usernameControl?.touched"
                                     placeholder="e.g. bookworm99"
-                                    required />
+                                    />
+                                @if (usernameControl?.invalid && usernameControl?.touched) {
+                                    <div class="invalid-feedback">
+                                        @if (usernameControl?.errors?.['required']) { Username is requiered. }
+                                        @if (usernameControl?.errors?.['minlength']) { Must be at least 3 characters long.}
+                                    </div>
+                                }
                             </div>
         
                             <div class="mb-3">
@@ -47,23 +55,33 @@
                                     <input 
                                         type="email" 
                                         class="form-control"
-                                        name="email" 
-                                        id="email"
-                                        [(ngModel)]="email"
+                                        formControlName="email" 
+                                        [class.is-invalid]="emailControl?.invalid && emailControl?.touched"
                                         placeholder="name@example.com"
-                                        required />
-                        </div>
+                                        />
+                                    @if (emailControl?.invalid && emailControl?.touched) {
+                                        <div class="invalid-feedback">
+                                            @if (emailControl?.errors?.['required']) { Email is required. }
+                                            @if (emailControl?.errors?.['email']) { Please enter a valid email address. }
+                                        </div>
+                                    }
+                            </div>
                         }
-                        <!-- password: always visible -->
+                        <!-- password: always required -->
                          <div class="mb-3">
                             <label for="password" class="form-label">Password</label>
                             <input 
                                 type="password"
                                 class="form-control"
-                                id="password"
-                                name="password"
-                                [(ngModel)]="password"
-                                required />
+                                formControlName="password"
+                                [class.is-invalid]="passwordControl?.invalid && passwordControl?.touched"
+                                placeholder="••••••••"/>
+                            @if (passwordControl?.invalid && passwordControl?.touched) {
+                                <div class="invalid-feeback">
+                                    @if (passwordControl?.errors?.['required']) {Password is required.}
+                                    @if (passwordControl?.errors?.['minlength']) {Password must be at least 6 characters long.}
+                                </div>
+                            }
                          </div>
                     </fieldset>
                     <footer class="d-flex flex-column gap-3 mt-2">
@@ -83,7 +101,5 @@
                 </form>
             </div>
         </div>
-
     </div>
-
 </div>
