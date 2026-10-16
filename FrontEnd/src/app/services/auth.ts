@@ -2,6 +2,7 @@ import { HttpClient } from "@angular/common/http";
 import { Injectable, inject, signal } from "@angular/core";
 import { Observable, tap } from "rxjs";
 import { LoginPayload, RegisterPayload } from "../interfaces/user";
+import Swal from "sweetalert2";
 
 @Injectable({
     //share global instance to whole app
@@ -40,11 +41,32 @@ export class AuthService {
 
     // to clean token on logout and reload whole page
     logout(): void {
-        if (confirm('Are you sure you want to log out?')) {
-        localStorage.removeItem(this.tokenKey);
-        // clears signal on logout
-        this.currentUser.set(null);
-        }
+        Swal.fire({
+            title: 'Are you sure?',
+            // theme: 'auto',
+            text: 'You will be logged out of your session.',
+            icon: 'warning',
+            showCancelButton: true,
+            confirmButtonColor: '#d33',
+            cancelButtonColor: '#6c757d',
+            confirmButtonText: 'Yes, log out',
+            cancelButtonText: 'Cancel'
+        }).then((result) => {
+            if (result.isConfirmed) {
+                localStorage.removeItem(this.tokenKey);
+                // clears signal on logout
+                this.currentUser.set(null);
+
+                // logout notification
+                Swal.fire({
+                    title: 'Logged Out',
+                    text: 'Come back soon!',
+                    icon: 'success',
+                    timer: 1500,
+                    showConfirmButton: false
+                });
+            }
+        });
     }
 
     // to get the username from the JWT
