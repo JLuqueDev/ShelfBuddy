@@ -85,7 +85,7 @@
                          </div>
                     </fieldset>
                     <footer class="d-flex flex-column gap-3 mt-2">
-                        <button type="submit" class="btn btn-primary w-100" data-bs-dismiss="modal">
+                        <button type="submit" class="btn btn-primary w-100" [disabled]="authForm.invalid" data-bs-dismiss="modal">
                             {{ isLoginMode ? 'Login' : 'Register'}}
                         </button>
                         <p>
