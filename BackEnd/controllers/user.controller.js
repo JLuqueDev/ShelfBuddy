@@ -16,7 +16,7 @@ const register = async(req, res) => {
         if (existingUser) {
             const input = existingUser.email === formatedEmail ? 'Email' : 'Username';
             console.log(`${input} is already registered!`); 
-            return res.status(400).json({ msg: `${input} already exists in the DB!`});
+            return res.status(400).json({ msg: `${input} already registered. Choose another one or Log in!`});
         }
 
         const hashedPassword = await bcrypt.hash(password, 10)

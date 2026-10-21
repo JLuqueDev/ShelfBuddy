@@ -14,6 +14,7 @@ import { AuthPayload } from './interfaces/user';
 // services 
 import { AuthService } from './services/auth';
 import { BookService } from './services/book';
+import { Alert } from './services/alert';
 
 @Component({
   imports: [ Header, Hero, Searchbar, BookList, Footer, BookModal, AuthModal],
@@ -29,7 +30,10 @@ export class App implements OnInit {
   // AUTHENTICATION logic: register/login with jwt
   // =========================================
 
-  // importing authentication service
+  // importing AlertService 
+  private alertService = inject(Alert);
+
+  // importing authentication service 
   public authService = inject(AuthService);
 
   // takes signal (submitAuth) from authModal and renders user logic
@@ -42,13 +46,20 @@ export class App implements OnInit {
         next: (res) => {
           console.log('Login successfull and JWT stored:', res.token);
           // alert('Logged in successfully!');
+          this.alertService.success(
+          'Login Successful',
+          'Click on the book icon to see your library!'
+        )
           this.loadBooks(); //fetch and cache books for new logged user
           // window.location.reload();
         }, 
          // if backend replies an error (like 4xx code), runs this:
         error: (err) => {
           console.error('Login failed:', err.error?.msg || err.message);
-          alert(err.error?.msg || 'Login failed!');
+          this.alertService.error(
+            'Login failed!',
+            `${err.error?.msg}`
+          )
         }
       });
     } else {
@@ -57,12 +68,20 @@ export class App implements OnInit {
         // if backend answers successfully (2xx code), triggers this:
         next: (res) => {
           console.log('Registration successful:', res.msg);
-          alert('Account created successfully! You can login now.');
+          // alert('Account created successfully! You can login now.');
+          this.alertService.success(
+            'Account created!',
+            'You can log in now'
+          )
         },
         // if backend replies an error (like 4xx code), runs this:
         error: (err) => {
           console.error('Registration failed:', err.error?.msg || err.message);
-          alert(err.error?.msg || 'registration failed');
+          // alert(err.error?.msg || 'registration failed');
+          this.alertService.error(
+            'Registration failed',
+            `${err.error?.msg}`
+          )
         }
       });
     }
@@ -86,7 +105,7 @@ export class App implements OnInit {
         this.books.set(data);
         console.log('Books cached:', this.books().length);
       },
-      error: (err) => console.error('Failed to ferch books', err)
+      error: (err) => console.error('Failed to fetch books', err)
     });
   }
 
@@ -95,30 +114,63 @@ export class App implements OnInit {
     if (bookData._id) {
       //if it has an ID, updates(PUT) it
       this.bookService.updateBook(bookData._id, bookData).subscribe({
-        next: () => this.loadBooks(), // refreshe list on success
-        error: (err) => alert(err.error?.error || 'Failed to update book')
+        next: () => {
+          this.loadBooks() // refreshe list on success
+          this.alertService.success('Book edited', 'Data updated successfully!');
+        }, 
+        error: (err) => {
+          // alert(err.error?.error || 'Failed to update book')
+          const errorList = err.error?.errors;
+          let errorMsg = 'Unexpected error';
+            if (errorList && errorList.length > 0) {
+              errorMsg = errorList.map((e: any) => e.msg).join('<br>');
+            }
+            this.alertService.error('Failed to update book', errorMsg);
+        }
       });
     } else {
       //No ID, so add (POST) a new book
       this.bookService.addBook(bookData).subscribe({
-        next: () => this.loadBooks(), //refreshes on success
-        error: (err) => alert(err.error?.error || 'Failed to add book')
+        next: () => {
+          this.loadBooks() //refreshes on success
+          this.alertService.success('Book Added!', 'New book data successfully saved!');
+        }, 
+        error: (err) => {
+          // alert(err.error?.error || 'Failed to add book')
+        const errorList = err.error?.errors;
+        let errorMsg = '';
+          if (errorList && errorList.length > 0) {
+              errorMsg = errorList.map((e: any) => e.msg).join('<br>');
+            } else {
+              errorMsg = err.error?.error || err.error?.message || 'An unexpected error occurred';
+            }
+        this.alertService.error('Failed to add book', errorMsg);
+    }
       });
     }
   }
 
   // DELETE 
   deleteClick(id: string): void {
-    if (confirm('Are you sure you want to delete this book?')) {
-      this.bookService.deleteBook(id).subscribe({
+    this.alertService.confirm(
+      'Are you sure you want to delete this book?',
+      'This cannot be undone.'
+    ).then((result) => {
+      if (result.isConfirmed) {
+        this.bookService.deleteBook(id).subscribe({
         next: () => {
+          this.alertService.success('Deleted!', 'Book removed from your library.');
           // to update the book signal reactively
           this.books.update(currentBooks => currentBooks.filter(book => book._id !== id));
-        }, 
-        error: (err) => console.error('Failed to delete book', err)
+            },
+            error: (err) => {
+              console.error('Failed to delete book', err)
+              this.alertService.error('Error', err.error?.error || 'Could not delete book.')
+            }
+          });
+        }
       });
     }
-  }
 
   // =========================================
   // UI logic
@@ -149,7 +201,8 @@ export class App implements OnInit {
   bookList(): void {
     console.log('Root received the displaybooks event!');
     if (!this.authService.currentUser()) {
-      alert('Please register or log in to view your personal library!')
+      // alert('Please register or log in to view your personal library!')
+      this.alertService.error('Oops!', 'Please register or log in to view your personal library!')
       return;
     }
     this.displayBooks = !this.displayBooks;

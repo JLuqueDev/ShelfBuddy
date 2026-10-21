@@ -22,7 +22,8 @@ const validateBookBody = [
         .isLength({min:2}).withMessage('Title must be at least 2 characters long'),
     body('author')
         .trim()
-        .notEmpty().withMessage('Author is required'),
+        .notEmpty().withMessage('Author is required')
+        .isLength({min:2}).withMessage(' Author must be at least 2 characters long'),
     body('status')
         .optional()
         .isIn(['To read', 'Reading', 'Finished'])
