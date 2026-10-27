@@ -4,12 +4,15 @@
 
     <app-hero (showLibrary)="bookList()"></app-hero>
 
-    <app-searchbar (openAddModal)="openAddModal()"></app-searchbar>
+    <app-searchbar 
+        (openAddModal)="openAddModal()"
+        (searchChange)="onSearch($event)">
+    </app-searchbar>
 
-    @if (displayBooks) {
+    @if (displayBooks || searchQuery() ) {
         <div class="w-100 mt-3">
             <app-book-list 
-                [books]="books()"
+                [books]="filteredBooks()"
                 (editBook)="openEditModal($event)"
                 (deleteBook)="deleteClick($event)">
             </app-book-list>

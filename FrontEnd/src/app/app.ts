@@ -1,4 +1,4 @@
-import { Component, inject, signal, effect, OnInit, } from '@angular/core';
+import { Component, inject, signal, effect, OnInit, computed, } from '@angular/core';
 import { RouterOutlet } from '@angular/router';
 //comps
 import { Header } from './components/header/header';
@@ -208,8 +208,6 @@ export class App implements OnInit {
     this.displayBooks = !this.displayBooks;
   }
 
-  // 
-
   // EDIT OR ADD BOOK MODAL:  
   // empty or not book variable
   selectedBook: Book | null = null;
@@ -222,5 +220,22 @@ export class App implements OnInit {
     this.selectedBook = book;
   }
 
+  // search bar logic
+  searchQuery = signal<string>('');
+
+  filteredBooks = computed(() => {
+    const query = this.searchQuery().toLowerCase().trim();
+    const allBooks = this.books();
+
+    if (!query) return allBooks;
+
+    return allBooks.filter(book => 
+      book.title.toLowerCase().includes(query) ||
+      book.author.toLowerCase().includes(query)
+    );
+  });
+  onSearch(query: string): void {
+    this.searchQuery.set(query);
+  }
 }
 

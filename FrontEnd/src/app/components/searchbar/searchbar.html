@@ -4,7 +4,8 @@
         (submit)="onSearch($event)">
         <input type="search" 
                 class="form-control form-control-lg rounded-pill shadow-sm" 
-                placeholder="Search by title or author..." aria-label="Search Library">
+                placeholder="Search by title or author..." aria-label="Search Library"
+                (input)="onInput($event)">
         <div class="d-flex justify-content-center gap-2">
             <button class="btn btn-light border"
                 type="submit">Search Library</button>
