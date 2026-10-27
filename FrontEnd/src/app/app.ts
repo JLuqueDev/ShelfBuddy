@@ -190,6 +190,7 @@ export class App implements OnInit {
       if (!this.authService.currentUser()) {
         this.books.set([]); // reset book signal on logout
         this.displayBooks = false; // hides the library UI
+        // this.authService.logout;
       }
     });
   }

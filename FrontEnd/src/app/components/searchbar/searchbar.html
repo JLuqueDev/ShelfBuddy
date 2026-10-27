@@ -1,20 +1,22 @@
 <search class="w-100 mb-4">
-    <form class="d-flex flex-column gap-3" 
+    <form class="d-flex flex-row gap-2" 
         id="search-form" 
-        (submit)="onSearch($event)">
-        <input type="search" 
-                class="form-control form-control-lg rounded-pill shadow-sm" 
-                placeholder="Search by title or author..." aria-label="Search Library"
+        (submit)="$event.preventDefault()">
+        <div class="input-group input-group-lg shadow-sm rounded-pill overflow-hidden flex-grow-1">
+            <input type="search" 
+                class="form-control rounded-pill" 
+                placeholder="🔍 Search by title or author..." 
+                aria-label="Search Library"
+                [value]="query"
                 (input)="onInput($event)">
-        <div class="d-flex justify-content-center gap-2">
-            <button class="btn btn-light border"
-                type="submit">Search Library</button>
-            <button class="btn btn-light border" 
-                type="button"
-                data-bs-toggle="modal"
-                data-bs-target="#bookModal"
-                (click)="onAddBook()"
-                >Add New Book</button>
         </div>
+        <button class="btn btn-primary text-nowrap rounded-pill shadow-sm px-2" 
+            type="button"
+            data-bs-toggle="modal"
+            data-bs-target="#bookModal"
+            (click)="onAddBook()"
+            >Add New Book
+        </button>
+        
     </form>
 </search>

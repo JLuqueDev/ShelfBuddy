@@ -22,6 +22,7 @@ export const authInterceptor: HttpInterceptorFn = ( req, next ) => {
         catchError((error: HttpErrorResponse) => {
             if (error.status === 401) {
                 console.warn('Unauthorized request or expired token. Logging out...');
+                authService.logout();
             }
             return throwError(() => error);
         })
